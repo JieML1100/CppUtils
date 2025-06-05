@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{80bebbec-21ab-461d-8355-44e431fde244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Media">
+      <UniqueIdentifier>{0aaefe5d-a426-4430-a80e-879b9bfa04e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\sqlite">
+      <UniqueIdentifier>{e6be0c01-ff26-4908-9309-d2cd0d887dc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\zlib">
+      <UniqueIdentifier>{f4ec45f4-7f60-4fcb-9b60-74ff110af709}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Media\AudioFile.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="Media\H264Encoder.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\sqlite\sqlite3.h">
+      <Filter>Utils\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\crc32.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\deflate.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\gzguts.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\inffast.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\inffixed.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\inflate.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\inftrees.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\trees.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\zconf.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\zlib.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\zlib\zutil.h">
+      <Filter>Utils\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Clipboard.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Convert.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\CRandom.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\DataPack.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\DateTime.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\defines.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Dialog.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Dictionary.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Environment.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Event.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\File.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FileInfo.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FileStream.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Guid.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\HttpHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\httplib.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\json.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\List.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\MD5.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\MemLoadLibrary2.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Process.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ProcessOperator.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Registry.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SHA256.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Socket.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SqliteHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StopWatch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StringBuilder.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StringHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Thread.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\TimeSpan.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Tuple.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Media\H264Encoder.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\sqlite\sqlite3.c">
+      <Filter>Utils\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\adler32.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\compress.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\crc32.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\deflate.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\infback.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\inffast.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\inflate.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\inftrees.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\trees.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\uncompr.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\zlib\zutil.c">
+      <Filter>Utils\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Clipboard.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Convert.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\CRandom.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\DataPack.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\DateTime.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Dialog.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Environment.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Event.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\File.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\FileInfo.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\FileStream.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Guid.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\HttpHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\HttpHelper1.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\MD5.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Process.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ProcessOperator.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Registry.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\SHA256.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Socket.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\SqliteHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StopWatch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StringBuilder.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StringHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Thread.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\TimeSpan.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
