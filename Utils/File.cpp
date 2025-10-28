@@ -49,25 +49,31 @@ std::vector<uint8_t> File::ReadAllBytes(const std::string path)
 std::vector<std::string> File::ReadAllLines(const std::string path)
 {
 	std::string str = File::ReadAllText(path);
-	return StringHelper::Split(str, {'\r','\n'});
+	return StringHelper::Split(str, { '\r','\n' });
 }
 void File::WriteAllText(const std::string path, const std::string content)
 {
-	if (std::ofstream fout(path); fout) {
-		fout << content;
+	std::ofstream ofs(path, std::ios::binary);
+	if (ofs) {
+		ofs.write((char*)content.data(), content.size());
+		ofs.close();
 	}
 }
 void File::WriteAllBytes(const std::string path, const std::vector<uint8_t> content)
 {
-	if (std::ofstream fout(path); fout) {
-		fout.write((char*)content.data(), content.size());
+	std::ofstream ofs(path, std::ios::binary);
+	if (ofs) {
+		ofs.write((char*)content.data(), content.size());
+		ofs.close();
 	}
 }
 
 void File::WriteAllBytes(const std::string path, const uint8_t* content, size_t size)
 {
-	if (std::ofstream fout(path); fout) {
-		fout.write((char*)content, size);
+	std::ofstream ofs(path, std::ios::binary);
+	if (ofs) {
+		ofs.write((char*)content, size);
+		ofs.close();
 	}
 }
 void File::WriteAllLines(const std::string path, const std::vector<std::string> content)
@@ -77,14 +83,18 @@ void File::WriteAllLines(const std::string path, const std::vector<std::string> 
 }
 void File::AppendAllText(const std::string path, const std::string content)
 {
-	if (std::ofstream fout(path, std::ios::app); fout) {
+	std::ofstream fout(path, std::ios::app);
+	if (fout) {
 		fout.write((char*)content.data(), content.size());
+		fout.close();
 	}
 }
 void File::AppendAllBytes(const std::string path, const std::vector<uint8_t> content)
 {
-	if (std::ofstream fout(path, std::ios::app); fout) {
+	std::ofstream fout(path, std::ios::app);
+	if (fout) {
 		fout.write((char*)content.data(), content.size());
+		fout.close();
 	}
 }
 void File::AppendAllLines(const std::string path, const std::vector<std::string> content)

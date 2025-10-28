@@ -19,8 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Media\AudioFile.h" />
-    <ClInclude Include="Media\H264Encoder.h" />
     <ClInclude Include="Utils\Clipboard.h" />
     <ClInclude Include="Utils\Convert.h" />
     <ClInclude Include="Utils\CRandom.h" />
@@ -68,7 +66,6 @@
     <ClInclude Include="Utils\zlib\zutil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Media\H264Encoder.cpp" />
     <ClCompile Include="Utils\Clipboard.cpp" />
     <ClCompile Include="Utils\Convert.cpp" />
     <ClCompile Include="Utils\CRandom.cpp" />
@@ -162,19 +159,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>$(ProjectName)_x64d</TargetName>
+    <TargetName>$(ProjectName)_x64_MTd</TargetName>
     <OutDir>$(SolutionDir)build</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>$(ProjectName)_x64</TargetName>
+    <TargetName>$(ProjectName)_x64_MT</TargetName>
     <OutDir>$(SolutionDir)build</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>$(ProjectName)_x86</TargetName>
+    <TargetName>$(ProjectName)_x86_MT</TargetName>
     <OutDir>$(SolutionDir)build</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)_x86d</TargetName>
+    <TargetName>$(ProjectName)_x86_MTd</TargetName>
     <OutDir>$(SolutionDir)build</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -188,7 +185,7 @@
       </PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -209,7 +206,7 @@
       </PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -228,7 +225,7 @@
       </PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -248,7 +245,7 @@
       </PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>

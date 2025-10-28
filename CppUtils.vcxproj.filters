@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Media\AudioFile.h">
-      <Filter>Media</Filter>
-    </ClInclude>
-    <ClInclude Include="Media\H264Encoder.h">
-      <Filter>Media</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\sqlite\sqlite3.h">
       <Filter>Utils\sqlite</Filter>
     </ClInclude>
@@ -158,9 +152,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Media\H264Encoder.cpp">
-      <Filter>Media</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\sqlite\sqlite3.c">
       <Filter>Utils\sqlite</Filter>
     </ClCompile>

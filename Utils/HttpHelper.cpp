@@ -452,7 +452,6 @@ std::string HttpHelper::Post(std::string url, std::string body, std::string head
 			std::cerr << "Error: WinHttpReadData failed." << std::endl;
 		}
 		else {
-			printf(pszOutBuffer);
 			response.append(pszOutBuffer, dwDownloaded);
 		}
 
