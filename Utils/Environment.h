@@ -2,14 +2,12 @@
 #include "defines.h"
 #include <string>
 #include <vector>
-enum class SpecialFolderOption
-{
+enum class SpecialFolderOption {
 	None = 0,
 	Create = 0x8000,
 	DoNotVerify = 0x4000
 };
-enum class SpecialFolder
-{
+enum class SpecialFolder {
 	ApplicationData = 26,
 	CommonApplicationData = 35,
 	LocalApplicationData = 28,
@@ -58,8 +56,7 @@ enum class SpecialFolder
 	SystemX86 = 41,
 	Windows = 36
 };
-class Environment
-{
+class Environment {
 public:
 	static std::string CommandLine();
 	static std::string CurrentDirectory();

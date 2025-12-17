@@ -2,8 +2,7 @@
 #include "defines.h"
 #include <filesystem>
 #include <fstream>
-class FileInfo
-{
+class FileInfo {
 private:
     std::filesystem::path m_path;
 public:
@@ -19,8 +18,7 @@ public:
     void Create();
     void Delete();
 };
-class DirectoryInfo
-{
+class DirectoryInfo {
 private:
     std::filesystem::path dirPath;
 public:
@@ -33,8 +31,4 @@ public:
     std::string ParentDirectoryName();
     std::vector<FileInfo> GetFiles();
     std::vector<DirectoryInfo> GetDirectories();
-    static void Create(std::string dirPath);
-    static bool Exists(std::string dirPath);
-    static void Delete(std::string dirPath, bool recursive = false);
 };
-

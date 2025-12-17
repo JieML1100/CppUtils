@@ -2,14 +2,13 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "defines.h"
 #include <iostream>
-#include <winsock.h>
 
 #pragma comment(lib, "ws2_32.lib")
 class TCPSocket {
 public:
-	SOCKET Handle;
+	UINT_PTR Handle;
 	TCPSocket();
-	TCPSocket(SOCKET h);
+	TCPSocket(UINT_PTR h);
 	~TCPSocket();
 	bool Connect(const char* ip, int port);
 	bool Listen(int port, int backlog = SOMAXCONN);
@@ -23,7 +22,7 @@ public:
 };
 class UDPSocket {
 public:
-	SOCKET Handle;
+	UINT_PTR Handle;
 
 	UDPSocket();
 	~UDPSocket();

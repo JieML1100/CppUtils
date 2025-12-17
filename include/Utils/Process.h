@@ -4,8 +4,7 @@
 #include <string>
 #include <TlHelp32.h>
 #include <Psapi.h>
-class Process
-{
+class Process {
 public:
 	int Id;
 	std::wstring ProcessName;

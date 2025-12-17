@@ -6,18 +6,14 @@
 #pragma warning(disable: 4267)
 #pragma warning(disable: 4244)
 #pragma warning(disable: 4018)
-std::vector<std::string> StringHelper::Split(std::string str, std::string separator)
-{
+std::vector<std::string> StringHelper::Split(std::string str, std::string separator) {
 	std::vector<std::string> result = std::vector<std::string>();
 	int lastIndex = 0;
 	int separatorSize = separator.size();
 
-	for (int i = 0; i <= str.size() - separatorSize; i++)
-	{
-		if (str.substr(i, separatorSize) == separator)
-		{
-			if (lastIndex != i)
-			{
+	for (int i = 0; i <= str.size() - separatorSize; i++) {
+		if (str.substr(i, separatorSize) == separator) {
+			if (lastIndex != i) {
 				result.push_back(std::string(&str[lastIndex], i - lastIndex));
 			}
 			lastIndex = i + separatorSize;
@@ -25,27 +21,21 @@ std::vector<std::string> StringHelper::Split(std::string str, std::string separa
 		}
 	}
 
-	if (lastIndex < str.size())
-	{
+	if (lastIndex < str.size()) {
 		result.push_back(std::string(&str[lastIndex], str.size() - lastIndex));
 	}
 
 	return result;
 }
-std::vector<std::string> StringHelper::Split(std::string str, std::initializer_list<std::string> separators)
-{
+std::vector<std::string> StringHelper::Split(std::string str, std::initializer_list<std::string> separators) {
 	std::vector<std::string> result = std::vector<std::string>();
 	int lastIndex = 0;
 
-	for (int i = 0; i < str.size(); i++)
-	{
-		for (auto separator : separators)
-		{
+	for (int i = 0; i < str.size(); i++) {
+		for (auto separator : separators) {
 			int separatorSize = separator.size();
-			if (i + separatorSize <= str.size() && str.substr(i, separatorSize) == separator)
-			{
-				if (lastIndex != i)
-				{
+			if (i + separatorSize <= str.size() && str.substr(i, separatorSize) == separator) {
+				if (lastIndex != i) {
 					result.push_back(std::string(&str[lastIndex], i - lastIndex));
 				}
 				lastIndex = i + separatorSize;
@@ -55,26 +45,20 @@ std::vector<std::string> StringHelper::Split(std::string str, std::initializer_l
 		}
 	}
 
-	if (lastIndex < str.size())
-	{
+	if (lastIndex < str.size()) {
 		result.push_back(std::string(&str[lastIndex], str.size() - lastIndex));
 	}
 
 	return result;
 }
-std::vector<std::string> StringHelper::Split(std::string str, std::initializer_list<char> separators)
-{
+std::vector<std::string> StringHelper::Split(std::string str, std::initializer_list<char> separators) {
 	std::vector<std::string> result = std::vector<std::string>();
 	int lastIndex = 0;
 
-	for (int i = 0; i < str.size(); i++)
-	{
-		for (auto separator : separators)
-		{
-			if (str[i] == separator)
-			{
-				if (lastIndex != i)
-				{
+	for (int i = 0; i < str.size(); i++) {
+		for (auto separator : separators) {
+			if (str[i] == separator) {
+				if (lastIndex != i) {
 					result.push_back(std::string(&str[lastIndex], i - lastIndex));
 				}
 				lastIndex = i + 1;
@@ -83,25 +67,20 @@ std::vector<std::string> StringHelper::Split(std::string str, std::initializer_l
 		}
 	}
 
-	if (lastIndex < str.size())
-	{
+	if (lastIndex < str.size()) {
 		result.push_back(std::string(&str[lastIndex], str.size() - lastIndex));
 	}
 
 	return result;
 }
-std::vector<std::wstring> StringHelper::Split(std::wstring str, std::wstring separator)
-{
+std::vector<std::wstring> StringHelper::Split(std::wstring str, std::wstring separator) {
 	std::vector<std::wstring> result = std::vector<std::wstring>();
 	int lastIndex = 0;
 	int separatorSize = separator.size();
 
-	for (int i = 0; i <= str.size() - separatorSize; i++)
-	{
-		if (str.substr(i, separatorSize) == separator)
-		{
-			if (lastIndex != i)
-			{
+	for (int i = 0; i <= str.size() - separatorSize; i++) {
+		if (str.substr(i, separatorSize) == separator) {
+			if (lastIndex != i) {
 				result.push_back(std::wstring(&str[lastIndex], i - lastIndex));
 			}
 			lastIndex = i + separatorSize;
@@ -109,27 +88,21 @@ std::vector<std::wstring> StringHelper::Split(std::wstring str, std::wstring sep
 		}
 	}
 
-	if (lastIndex < str.size())
-	{
+	if (lastIndex < str.size()) {
 		result.push_back(std::wstring(&str[lastIndex], str.size() - lastIndex));
 	}
 
 	return result;
 }
-std::vector<std::wstring> StringHelper::Split(std::wstring str, std::initializer_list<std::wstring> separators)
-{
+std::vector<std::wstring> StringHelper::Split(std::wstring str, std::initializer_list<std::wstring> separators) {
 	std::vector<std::wstring> result = std::vector<std::wstring>();
 	int lastIndex = 0;
 
-	for (int i = 0; i < str.size(); i++)
-	{
-		for (auto separator : separators)
-		{
+	for (int i = 0; i < str.size(); i++) {
+		for (auto separator : separators) {
 			int separatorSize = separator.size();
-			if (i + separatorSize <= str.size() && str.substr(i, separatorSize) == separator)
-			{
-				if (lastIndex != i)
-				{
+			if (i + separatorSize <= str.size() && str.substr(i, separatorSize) == separator) {
+				if (lastIndex != i) {
 					result.push_back(std::wstring(&str[lastIndex], i - lastIndex));
 				}
 				lastIndex = i + separatorSize;
@@ -139,26 +112,20 @@ std::vector<std::wstring> StringHelper::Split(std::wstring str, std::initializer
 		}
 	}
 
-	if (lastIndex < str.size())
-	{
+	if (lastIndex < str.size()) {
 		result.push_back(std::wstring(&str[lastIndex], str.size() - lastIndex));
 	}
 
 	return result;
 }
-std::vector<std::wstring> StringHelper::Split(std::wstring str, std::initializer_list<wchar_t> separators)
-{
+std::vector<std::wstring> StringHelper::Split(std::wstring str, std::initializer_list<wchar_t> separators) {
 	std::vector<std::wstring> result = std::vector<std::wstring>();
 	int lastIndex = 0;
 
-	for (int i = 0; i < str.size(); i++)
-	{
-		for (auto separator : separators)
-		{
-			if (str[i] == separator)
-			{
-				if (lastIndex != i)
-				{
+	for (int i = 0; i < str.size(); i++) {
+		for (auto separator : separators) {
+			if (str[i] == separator) {
+				if (lastIndex != i) {
 					result.push_back(std::wstring(&str[lastIndex], i - lastIndex));
 				}
 				lastIndex = i + 1;
@@ -167,8 +134,7 @@ std::vector<std::wstring> StringHelper::Split(std::wstring str, std::initializer
 		}
 	}
 
-	if (lastIndex < str.size())
-	{
+	if (lastIndex < str.size()) {
 		result.push_back(std::wstring(&str[lastIndex], str.size() - lastIndex));
 	}
 
@@ -253,8 +219,7 @@ std::wstring StringHelper::Trim(std::wstring str) {
 	return result;
 }
 
-std::string StringHelper::TrimLeft(std::string str)
-{
+std::string StringHelper::TrimLeft(std::string str) {
 	std::string result;
 	int start = 0;
 	int end = str.size() - 1;
@@ -264,8 +229,7 @@ std::string StringHelper::TrimLeft(std::string str)
 	}
 	return result;
 }
-std::wstring StringHelper::TrimLeft(std::wstring str)
-{
+std::wstring StringHelper::TrimLeft(std::wstring str) {
 	std::wstring result;
 	int start = 0;
 	int end = str.size() - 1;
@@ -275,8 +239,7 @@ std::wstring StringHelper::TrimLeft(std::wstring str)
 	}
 	return result;
 }
-std::string StringHelper::TrimRight(std::string str)
-{
+std::string StringHelper::TrimRight(std::string str) {
 	std::string result;
 	int start = 0;
 	int end = str.size() - 1;
@@ -286,8 +249,7 @@ std::string StringHelper::TrimRight(std::string str)
 	}
 	return result;
 }
-std::wstring StringHelper::TrimRight(std::wstring str)
-{
+std::wstring StringHelper::TrimRight(std::wstring str) {
 	std::wstring result;
 	int start = 0;
 	int end = str.size() - 1;
@@ -298,42 +260,33 @@ std::wstring StringHelper::TrimRight(std::wstring str)
 	return result;
 }
 
-int StringHelper::IndexOf(std::string str, std::string substr)
-{
+int StringHelper::IndexOf(std::string str, std::string substr) {
 	return str.find(substr);
 }
-int StringHelper::IndexOf(std::wstring str, std::wstring substr)
-{
+int StringHelper::IndexOf(std::wstring str, std::wstring substr) {
 	return str.find(substr);
 }
-int StringHelper::LastIndexOf(std::string str, std::string substr)
-{
+int StringHelper::LastIndexOf(std::string str, std::string substr) {
 	return str.rfind(substr);
 }
-int StringHelper::LastIndexOf(std::wstring str, std::wstring substr)
-{
+int StringHelper::LastIndexOf(std::wstring str, std::wstring substr) {
 	return str.rfind(substr);
 }
-bool StringHelper::Contains(std::string str, std::string substr)
-{
+bool StringHelper::Contains(std::string str, std::string substr) {
 	return str.find(substr) != std::string::npos;
 }
-bool StringHelper::Contains(std::wstring str, std::wstring substr)
-{
+bool StringHelper::Contains(std::wstring str, std::wstring substr) {
 	return str.find(substr) != std::wstring::npos;
 }
-int StringHelper::GetHashCode(std::string str)
-{
+int StringHelper::GetHashCode(std::string str) {
 	int num = 5381;
 	int num2 = num;
 	char* ptr2 = (char*)str.c_str();
 	int num3;
-	while ((num3 = *ptr2) != 0)
-	{
+	while ((num3 = *ptr2) != 0) {
 		num = ((num << 5) + num) ^ num3;
 		num3 = ptr2[1];
-		if (num3 == 0)
-		{
+		if (num3 == 0) {
 			break;
 		}
 		num2 = ((num2 << 5) + num2) ^ num3;
@@ -341,18 +294,15 @@ int StringHelper::GetHashCode(std::string str)
 	}
 	return num + num2 * 1566083941;
 }
-int StringHelper::GetHashCode(std::wstring str)
-{
+int StringHelper::GetHashCode(std::wstring str) {
 	int num = 5381;
 	int num2 = num;
 	wchar_t* ptr2 = (wchar_t*)str.c_str();
 	int num3;
-	while ((num3 = *ptr2) != 0)
-	{
+	while ((num3 = *ptr2) != 0) {
 		num = ((num << 5) + num) ^ num3;
 		num3 = ptr2[1];
-		if (num3 == 0)
-		{
+		if (num3 == 0) {
 			break;
 		}
 		num2 = ((num2 << 5) + num2) ^ num3;
@@ -360,25 +310,20 @@ int StringHelper::GetHashCode(std::wstring str)
 	}
 	return num + num2 * 1566083941;
 }
-std::string StringHelper::Insert(std::string str, int index, std::string substr)
-{
+std::string StringHelper::Insert(std::string str, int index, std::string substr) {
 	return str.insert(index, substr);
 }
-std::wstring StringHelper::Insert(std::wstring str, int index, std::wstring substr)
-{
+std::wstring StringHelper::Insert(std::wstring str, int index, std::wstring substr) {
 	return str.insert(index, substr);
 }
-std::string StringHelper::Remove(std::string str, int index, int count)
-{
+std::string StringHelper::Remove(std::string str, int index, int count) {
 	return str.erase(index, count);
 }
-std::wstring StringHelper::Remove(std::wstring str, int index, int count)
-{
+std::wstring StringHelper::Remove(std::wstring str, int index, int count) {
 	return str.erase(index, count);
 }
 
-std::string StringHelper::Join(std::vector<std::string> strs, std::string separator)
-{
+std::string StringHelper::Join(std::vector<std::string> strs, std::string separator) {
 	std::string result;
 	for (int i = 0; i < strs.size(); i++) {
 		result += strs[i];
@@ -388,8 +333,7 @@ std::string StringHelper::Join(std::vector<std::string> strs, std::string separa
 	}
 	return result;
 }
-std::wstring StringHelper::Join(std::vector<std::wstring> strs, std::wstring separator)
-{
+std::wstring StringHelper::Join(std::vector<std::wstring> strs, std::wstring separator) {
 	std::wstring result;
 	for (int i = 0; i < strs.size(); i++) {
 		result += strs[i];
@@ -400,8 +344,7 @@ std::wstring StringHelper::Join(std::vector<std::wstring> strs, std::wstring sep
 	return result;
 }
 
-std::wstring StringHelper::Format(const wchar_t* fmt, ...)
-{
+std::wstring StringHelper::Format(const wchar_t* fmt, ...) {
 	va_list va;
 	va_start(va, fmt);
 	int size = __stdio_common_vswprintf(NULL, NULL, 0, fmt, NULL, va);
@@ -410,8 +353,7 @@ std::wstring StringHelper::Format(const wchar_t* fmt, ...)
 	va_end(va);
 	return result;
 }
-std::string StringHelper::Format(const char* fmt, ...)
-{
+std::string StringHelper::Format(const char* fmt, ...) {
 	va_list va;
 	va_start(va, fmt);
 	int size = __stdio_common_vsprintf(NULL, NULL, 0, fmt, NULL, va);

@@ -4,8 +4,7 @@
 #include <functional>
 #include <string>
 
-enum class MouseButtons
-{
+enum class MouseButtons {
 	None = 0x00000000,
 	Left = 0x00100000,
 	Right = 0x00200000,
@@ -13,8 +12,7 @@ enum class MouseButtons
 	XButton1 = 0x00800000,
 	XButton2 = 0x01000000
 };
-enum class Keys
-{
+enum class Keys {
 	None = 0x00000000,
 	LButton = 0x00000001,
 	RButton = 0x00000002,
@@ -211,8 +209,7 @@ enum class Keys
 	Sleep = 0x0000005F
 };
 template<typename Func>
-class Event
-{
+class Event {
 public:
 	using function_type = typename std::remove_pointer<Func>::type;
 	using std_function_type = std::function<function_type>;
@@ -267,13 +264,11 @@ public:
 		_events.clear();
 	}
 };
-class EventArgs
-{
+class EventArgs {
 public:
 	EventArgs() {}
 };
-class MouseEventArgs : public EventArgs
-{
+class MouseEventArgs : public EventArgs {
 public:
 	MouseButtons	Buttons;
 	int		Clicks;
@@ -283,8 +278,7 @@ public:
 	MouseEventArgs() {}
 	MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta);
 };
-class KeyEventArgs : EventArgs
-{
+class KeyEventArgs : EventArgs {
 public:
 	Keys	KeyData;
 	bool	EventHandled;

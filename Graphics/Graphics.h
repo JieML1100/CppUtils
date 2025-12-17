@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include <d3d11.h>
+#include <d2d1.h>
 #include <d2d1_1.h>
-#include <d2d1_2.h>
-#include <dxgi1_2.h>
+#include <dxgi.h>
+#include <dxgiformat.h>
 #include <memory>
 #include <optional>
 #include <vector>
@@ -11,73 +11,72 @@
 #include "Font.h"
 #include "Colors.h"
 #include "Factory.h"
+#include "BitmapSource.h"
 
 #pragma comment(lib,"d2d1.lib")
-#pragma comment(lib,"dxgi.lib")
-#pragma comment(lib,"d3d11.lib")
 
 #ifndef _LIB
-// MT (静态运行时库)
-#if defined(_MT) && !defined(_DLL)
-    #if defined(_M_X64) && defined(_DEBUG)
-        #pragma comment(lib, "Graphics_x64_MTd.lib")
-    #elif defined(_M_X64) && !defined(_DEBUG)
-        #pragma comment(lib, "Graphics_x64_MT.lib")
-    #elif defined(_M_IX86) && defined(_DEBUG)
-        #pragma comment(lib, "Graphics_x86_MTd.lib")
-    #elif defined(_M_IX86) && !defined(_DEBUG)
-        #pragma comment(lib, "Graphics_x86_MT.lib")
+    #if defined(_MT)
+        // MT (静态运行时库)
+        #if !defined(_DLL)
+            #if defined(_M_X64) && defined(_DEBUG)
+                #pragma comment(lib, "Graphics_x64_MTd.lib")
+            #elif defined(_M_X64) && !defined(_DEBUG)
+                #pragma comment(lib, "Graphics_x64_MT.lib")
+            #elif defined(_M_IX86) && defined(_DEBUG)
+                #pragma comment(lib, "Graphics_x86_MTd.lib")
+            #elif defined(_M_IX86) && !defined(_DEBUG)
+                #pragma comment(lib, "Graphics_x86_MT.lib")
+            #else
+                #error "Unsupported architecture or configuration"
+            #endif
+        // MD (动态运行时库)
+        #else
+            #if defined(_M_X64) && defined(_DEBUG)
+                #pragma comment(lib, "Graphics_x64_MDd.lib")
+            #elif defined(_M_X64) && !defined(_DEBUG)
+                #pragma comment(lib, "Graphics_x64_MD.lib")
+            #elif defined(_M_IX86) && defined(_DEBUG)
+                #pragma comment(lib, "Graphics_x86_MDd.lib")
+            #elif defined(_M_IX86) && !defined(_DEBUG)
+                #pragma comment(lib, "Graphics_x86_MD.lib")
+            #else
+                #error "Unsupported architecture or configuration"
+            #endif
+        #endif
     #else
-        #error "Unsupported architecture or configuration"
+        #pragma message("Graphics: automatic runtime library linking skipped because _MT is not defined.")
     #endif
-// MD (动态运行时库)
-#elif defined(_MT) && defined(_DLL)
-    #if defined(_M_X64) && defined(_DEBUG)
-        #pragma comment(lib, "Graphics_x64_MDd.lib")
-    #elif defined(_M_X64) && !defined(_DEBUG)
-        #pragma comment(lib, "Graphics_x64_MD.lib")
-    #elif defined(_M_IX86) && defined(_DEBUG)
-        #pragma comment(lib, "Graphics_x86_MDd.lib")
-    #elif defined(_M_IX86) && !defined(_DEBUG)
-        #pragma comment(lib, "Graphics_x86_MD.lib")
-    #else
-        #error "Unsupported architecture or configuration"
-    #endif
-#else
-    #error "Unsupported runtime library configuration"
-#endif
 #endif
 
 EXTERN_C Font* DefaultFontObject;
-class D2DGraphics
-{
+class D2DGraphics {
 public:
-	enum class SurfaceKind
-	{
+	enum class SurfaceKind {
 		None,
 		Offscreen,
-		SwapChain,
-		DxgiSurface,
-		ExternalBitmap
+		Compatible,
+		Hwnd,
+		ExternalBitmap,
+		DxgiSwapChain
 	};
 
-	struct InitOptions
-	{
+	struct InitOptions {
 		SurfaceKind kind = SurfaceKind::None;
 		UINT width = 0;
 		UINT height = 0;
-		IDXGISwapChain* swapChain = nullptr;
-		IDXGISurface* dxgiSurface = nullptr;
-		ID2D1Bitmap1* targetBitmap = nullptr;
-		D2D1_DEVICE_CONTEXT_OPTIONS contextOptions = D2D1_DEVICE_CONTEXT_OPTIONS_ENABLE_MULTITHREADED_OPTIMIZATIONS;
+		IWICBitmap* wicBitmap = nullptr;
+		bool takeOwnership = false;
+		FLOAT dpiX = 96.0f;
+		FLOAT dpiY = 96.0f;
 		DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		D2D1_ALPHA_MODE alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
-		D2D1_BITMAP_OPTIONS bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_GDI_COMPATIBLE;
 	};
 
 	D2DGraphics();
-	explicit D2DGraphics(UINT width, UINT height);
-	explicit D2DGraphics(ID2D1Bitmap1* bmp);
+	explicit D2DGraphics(IWICBitmap* bitmap, bool takeOwnership = false);
+	explicit D2DGraphics(const BitmapSource* bitmap);
+	explicit D2DGraphics(IDXGISwapChain* swapChain);
 	explicit D2DGraphics(const InitOptions& options);
 	virtual ~D2DGraphics();
 
@@ -140,10 +139,25 @@ public:
 	void DrawBitmap(ID2D1Bitmap* bmp, float x, float y, float w, float h, float opacity = 1.0f);
 	void DrawBitmap(ID2D1Bitmap* bmp, float dest_x, float dest_y, float dest_w, float dest_h, float src_x, float src_y, float src_w, float src_h, float opacity = 1.0f);
 
+	void FillOpacityMask(ID2D1Bitmap* mask, D2D1_POINT_2F destPoint, D2D1_COLOR_F color, D2D1_OPACITY_MASK_CONTENT content = D2D1_OPACITY_MASK_CONTENT_GRAPHICS);
+	void FillOpacityMask(ID2D1Bitmap* mask, D2D1_RECT_F destRect, D2D1_COLOR_F color, D2D1_OPACITY_MASK_CONTENT content = D2D1_OPACITY_MASK_CONTENT_GRAPHICS);
+	void FillOpacityMask(ID2D1Bitmap* mask, D2D1_RECT_F destRect, D2D1_RECT_F srcRect, D2D1_COLOR_F color, D2D1_OPACITY_MASK_CONTENT content = D2D1_OPACITY_MASK_CONTENT_GRAPHICS);
+
+	void FillMesh(ID2D1Mesh* mesh, D2D1_COLOR_F color);
+
 	IDWriteTextLayout* CreateStringLayout(std::wstring str, float width, float height, Font* font = nullptr);
 
 	void DrawStringLayout(IDWriteTextLayout* layout, float x, float y, D2D1_COLOR_F color);
 	void DrawStringLayout(IDWriteTextLayout* layout, float x, float y, ID2D1Brush* brush);
+
+	void DrawStringLayoutCentered(IDWriteTextLayout* layout, float centerX, float centerY, D2D1_COLOR_F color);
+	void DrawStringLayoutCentered(IDWriteTextLayout* layout, float centerX, float centerY, ID2D1Brush* brush);
+
+	void DrawStringLayoutOutlined(IDWriteTextLayout* layout, float x, float y, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor);
+	void DrawStringLayoutOutlined(IDWriteTextLayout* layout, float x, float y, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor);
+
+	void DrawStringLayoutCenteredOutlined(IDWriteTextLayout* layout, float centerX, float centerY, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor);
+	void DrawStringLayoutCenteredOutlined(IDWriteTextLayout* layout, float centerX, float centerY, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor);
 
 	void DrawStringLayoutEffect(IDWriteTextLayout* layout, float x, float y, D2D1_COLOR_F color, DWRITE_TEXT_RANGE subRange, D2D1_COLOR_F fontBack, Font* font = NULL);
 	void DrawStringLayoutEffect(IDWriteTextLayout* layout, float x, float y, ID2D1Brush* brush, DWRITE_TEXT_RANGE subRange, D2D1_COLOR_F fontBack, Font* font = NULL);
@@ -152,6 +166,15 @@ public:
 	void DrawString(std::wstring str, float x, float y, ID2D1Brush* brush, Font* font = nullptr);
 	void DrawString(std::wstring str, float x, float y, float w, float h, D2D1_COLOR_F color, Font* font = nullptr);
 	void DrawString(std::wstring str, float x, float y, float w, float h, ID2D1Brush* brush, Font* font = nullptr);
+
+	void DrawStringCentered(std::wstring str, float centerX, float centerY, D2D1_COLOR_F color, Font* font = nullptr);
+	void DrawStringCentered(std::wstring str, float centerX, float centerY, ID2D1Brush* brush, Font* font = nullptr);
+
+	void DrawStringOutlined(std::wstring str, float x, float y, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font = nullptr);
+	void DrawStringOutlined(std::wstring str, float x, float y, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font = nullptr);
+
+	void DrawStringCenteredOutlined(std::wstring str, float centerX, float centerY, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font = nullptr);
+	void DrawStringCenteredOutlined(std::wstring str, float centerX, float centerY, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font = nullptr);
 
 	void DrawTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color, float width = 1.0f);
 	void FillTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color);
@@ -170,24 +193,13 @@ public:
 	void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
 	void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE antialiasMode);
 
-	[[nodiscard]] Microsoft::WRL::ComPtr<ID2D1Bitmap1> CloneTargetBitmap() const;
-	[[nodiscard]] Microsoft::WRL::ComPtr<IWICBitmap> CopyTargetToWicBitmap() const;
-	[[nodiscard]] std::vector<uint8_t> CopyTargetPixels(UINT* stride = nullptr) const;
-
-	ID2D1DeviceContext* GetDeviceContextRaw() const;
-	Microsoft::WRL::ComPtr<ID2D1DeviceContext> GetDeviceContext() const;
-	Microsoft::WRL::ComPtr<ID2D1DeviceContext1> GetDeviceContext1() const;
+	ID2D1RenderTarget* GetRenderTargetRaw() const;
+	Microsoft::WRL::ComPtr<ID2D1RenderTarget> GetRenderTarget() const;
+	IWICBitmap* GetTargetWicBitmap() const;
 
 	ID2D1Bitmap* CreateBitmap(IWICBitmap* wb);
-	ID2D1Bitmap* CreateBitmap(std::wstring path);
-	ID2D1Bitmap* CreateBitmap(void* data, int size);
-	ID2D1Bitmap* CreateBitmap(HBITMAP hb);
-	ID2D1Bitmap* CreateBitmap(HICON hb);
-	ID2D1Bitmap* CreateBitmap(int width, int height);
-
-	ID2D1Bitmap1* GetBitmap();
-	ID2D1Bitmap* GetSharedBitmap();
-	IWICBitmap* GetWicBitmap();
+	ID2D1Bitmap* CreateBitmap(IWICFormatConverter* conv, D2D1_BITMAP_PROPERTIES* props = nullptr);
+	ID2D1Bitmap* CreateBitmap(const std::shared_ptr<BitmapSource>& bitmapSource);
 
 	ID2D1LinearGradientBrush* CreateLinearGradientBrush(D2D1_GRADIENT_STOP* stops, unsigned int stopcount);
 	ID2D1RadialGradientBrush* CreateRadialGradientBrush(D2D1_GRADIENT_STOP* stops, unsigned int stopcount, D2D1_POINT_2F center);
@@ -197,8 +209,6 @@ public:
 	void SetTransform(D2D1_MATRIX_3X2_F matrix);
 	void ClearTransform();
 
-	std::vector<ID2D1Bitmap*> CreateBitmapFromGif(const char* path);
-	std::vector<ID2D1Bitmap*> CreateBitmapFromGifBuffer(void* data, int size);
 	static HBITMAP CopyFromScreen(int x, int y, int width, int height);
 	static HBITMAP CopyFromWidnow(HWND handle, int x, int y, int width, int height);
 	static SIZE GetScreenSize(int index = 0);
@@ -206,50 +216,47 @@ public:
 
 protected:
 	HRESULT Initialize(const InitOptions& options);
-	HRESULT InitializeWithSize(UINT width, UINT height, DXGI_FORMAT format, D2D1_ALPHA_MODE alphaMode, D2D1_BITMAP_OPTIONS options, D2D1_DEVICE_CONTEXT_OPTIONS ctxOptions);
-	HRESULT InitializeWithBitmap(ID2D1Bitmap1* bmp, bool takeOwnership, D2D1_DEVICE_CONTEXT_OPTIONS ctxOptions);
-	HRESULT InitializeWithDxgiSurface(IDXGISurface* surface, D2D1_DEVICE_CONTEXT_OPTIONS ctxOptions);
-	Microsoft::WRL::ComPtr<ID2D1Bitmap1> CreateCpuReadableSnapshot() const;
+	HRESULT InitializeWithSize(UINT width, UINT height, FLOAT dpiX, FLOAT dpiY, DXGI_FORMAT format, D2D1_ALPHA_MODE alphaMode);
+	HRESULT InitializeWithWicBitmap(IWICBitmap* bitmap, bool takeOwnership, FLOAT dpiX, FLOAT dpiY, DXGI_FORMAT format, D2D1_ALPHA_MODE alphaMode);
+	HRESULT InitializeWithSwapChain(IDXGISwapChain* swapChain);
+	HRESULT CreateRenderTargetFromBitmap(IWICBitmap* bitmap, FLOAT dpiX, FLOAT dpiY, DXGI_FORMAT format, D2D1_ALPHA_MODE alphaMode);
 	void ResetTarget();
 	HRESULT ConfigDefaultObjects();
-	bool EnsureDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options);
 
 protected:
-	Microsoft::WRL::ComPtr<ID2D1DeviceContext1> pD2DDeviceContext;
+	Microsoft::WRL::ComPtr<ID2D1RenderTarget> pRenderTarget;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> Default_Brush;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> Default_Brush_Back;
-	Microsoft::WRL::ComPtr<ID2D1Bitmap1> pD2DTargetBitmap;
+	Microsoft::WRL::ComPtr<IWICBitmap> pWicTargetBitmap;
 	SurfaceKind surfaceKind = SurfaceKind::None;
-	D2D1_DEVICE_CONTEXT_OPTIONS contextOptions = D2D1_DEVICE_CONTEXT_OPTIONS_NONE;
 };
-class HwndGraphics : public D2DGraphics
-{
+
+class CompatibleGraphics : public D2DGraphics {
+public:
+	CompatibleGraphics(D2DGraphics* parent, D2D1_SIZE_F desiredSize);
+
+	void ReSize(UINT width, UINT height) override;
+	ID2D1Bitmap* GetBitmap() const;
+	ID2D1BitmapRenderTarget* GetBitmapRenderTarget() const;
+
+private:
+	HRESULT Initialize(D2DGraphics* parent, D2D1_SIZE_F desiredSize);
+	HRESULT RecreateTarget();
+	void ResetCompatibleTarget();
+
+private:
+	Microsoft::WRL::ComPtr<ID2D1RenderTarget> parentRenderTarget;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> compatibleTarget;
+	D2D1_SIZE_F desiredSize;
+};
+
+class HwndGraphics : public D2DGraphics {
 private:
 	HWND hwnd;
-	Microsoft::WRL::ComPtr<IDXGISwapChain1> pSwapChain;
+	Microsoft::WRL::ComPtr<ID2D1HwndRenderTarget> pHwndRenderTarget;
 	HRESULT InitDevice();
 public:
 	HwndGraphics(HWND hWnd);
-	void ReSize(UINT width, UINT height) override;
-	void BeginRender() override;
-	void EndRender() override;
-};
-class IDXGISwapChainGraphics : public D2DGraphics
-{
-private:
-	Microsoft::WRL::ComPtr<IDXGISwapChain1> pSwapChain;
-public:
-	IDXGISwapChainGraphics(IDXGISwapChain* swapchain);
-	void ReSize(UINT width, UINT height) override;
-	void BeginRender() override;
-	void EndRender() override;
-};
-class DxgiSurfaceGraphics : public D2DGraphics
-{
-private:
-	Microsoft::WRL::ComPtr<IDXGISurface> pDxgiSurface;
-public:
-	DxgiSurfaceGraphics(IDXGISurface* dxgiSurface);
 	void ReSize(UINT width, UINT height) override;
 	void BeginRender() override;
 	void EndRender() override;

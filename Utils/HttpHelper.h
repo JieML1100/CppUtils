@@ -4,8 +4,7 @@
 #include <vector>
 #include <functional>
 typedef std::function<void(std::string)> HTTP_STREAM_CALLBACK;
-class HttpHelper
-{
+class HttpHelper {
 public:
 	static std::string UrlEncode(std::string str);
 	static std::string CheckUrl(std::string input);

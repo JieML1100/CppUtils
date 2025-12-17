@@ -3,8 +3,7 @@
 #include <Psapi.h>
 #include <string>
 #include <vector>
-class ProcessOperator
-{
+class ProcessOperator {
 public:
 	HANDLE Handle = NULL;
 	DWORD PID = NULL;
@@ -32,26 +31,22 @@ public:
 	ULONG64 FindPattern(ULONG64 _begin, const char* sPattern, int search_size, int offset = 0);
 	ULONG64 calcRVA(ULONG64 ptr,int offset);
 	template<typename T>
-	T Allocate(T val)
-	{
+	T Allocate(T val) {
 		ULONG64 addr = this->AllocateMemory(sizeof(T));
-		if (addr)
-		{
+		if (addr) {
 			this->Write(addr, val);
 			return addr;
 		}
 		return NULL;
 	}
 	template<typename T>
-	T Read(ULONG64 addr)
-	{
+	T Read(ULONG64 addr) {
 		T val;
 		if(Handle)ReadProcessMemory(this->Handle, PVOID(addr), &val, sizeof(T), NULL);
 		return val;
 	}
 	template<typename T>
-	void Write(ULONG64 addr, T val)
-	{
+	void Write(ULONG64 addr, T val) {
 		if (Handle)WriteProcessMemory(this->Handle, PVOID(addr), &val, sizeof(T), NULL);
 	}
 };

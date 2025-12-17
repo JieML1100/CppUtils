@@ -16,8 +16,7 @@
 #define typeof(x) decltype(x)
 #endif
 
-class DateTime
-{
+class DateTime {
 private:
     ULONGLONG dateData;
     void GetSystemTime(SYSTEMTIME& sysTime) const;

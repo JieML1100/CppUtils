@@ -4,8 +4,7 @@
 #include <dwrite.h>
 #include <string>
 #include <vector>
-class Font
-{
+class Font {
 private:
 	float _fontSize;
 	std::wstring _fontName;

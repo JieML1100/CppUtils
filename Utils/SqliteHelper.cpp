@@ -2,8 +2,7 @@
 #include "SqliteHelper.h"
 #include "Utils.h"
 
-const std::string SqliteTypeName[] =
-{
+const std::string SqliteTypeName[] = {
 	"INTEGER",
 	"LONG",
 	"REAL",
@@ -11,20 +10,16 @@ const std::string SqliteTypeName[] =
 	"BLOB",
 	"DATETIME"
 };
-SqliteHelper::SqliteHelper(const char* _path)
-{
+SqliteHelper::SqliteHelper(const char* _path) {
 	this->path = (char*)_path;
 }
-void SqliteHelper::Open()
-{
+void SqliteHelper::Open() {
 	int nRes = sqlite3_open(this->path, &this->pDB);
-	if (nRes != SQLITE_OK)
-	{
+	if (nRes != SQLITE_OK) {
 		std::cerr << "SQL error: " << sqlite3_errmsg(this->pDB) << std::endl;
 	}
 }
-bool SqliteHelper::IsTableExist(std::string tableName)
-{
+bool SqliteHelper::IsTableExist(std::string tableName) {
 	sqlite3_stmt* stmt;
 	const char* sql = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
 	int rc = sqlite3_prepare_v2(this->pDB, sql, -1, &stmt, 0);
@@ -35,24 +30,19 @@ bool SqliteHelper::IsTableExist(std::string tableName)
 	sqlite3_finalize(stmt);
 	return rc == SQLITE_ROW;
 }
-void SqliteHelper::DeleteTable(std::string tableName)
-{
+void SqliteHelper::DeleteTable(std::string tableName) {
 	this->Excute(StringHelper::Format("DROP TABLE [%s];", tableName.c_str()));
 }
-void SqliteHelper::CreateTable(std::string tableName, std::vector<Tuple<std::string, SqliteType>> columus)
-{
-	if (IsTableExist(tableName))
-	{
+void SqliteHelper::CreateTable(std::string tableName, std::vector<Tuple<std::string, SqliteType>> columus) {
+	if (IsTableExist(tableName)) {
 		this->DeleteTable(tableName);
 	}
 	std::stringstream sql;
 	sql << "CREATE TABLE [" << tableName << "] ([Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n";
-	for (int i = 0; i < columus.size(); i++)
-	{
+	for (int i = 0; i < columus.size(); i++) {
 		auto c = columus[i];
 		sql << "[" << c.Item1 << "] " << SqliteTypeName[(int)c.Item2];
-		if (i < columus.size() - 1)
-		{
+		if (i < columus.size() - 1) {
 			sql << ",\n";
 		}
 	}
@@ -60,30 +50,24 @@ void SqliteHelper::CreateTable(std::string tableName, std::vector<Tuple<std::str
 	std::string str = sql.str();
 	this->Excute(str);
 }
-void SqliteHelper::Close()
-{
+void SqliteHelper::Close() {
 	sqlite3_close(this->pDB);
 }
-void SqliteHelper::Select(std::string sql, SEL_CALLBAC callback)
-{
+void SqliteHelper::Select(std::string sql, SEL_CALLBAC callback) {
 	char* cErrMsg = nullptr;
-	sqlite3_exec(this->pDB, sql.c_str(), [](void* pram, int argc, char** argv, char** azColName, sqlite3_stmt* stmt)->int
-		{
+	sqlite3_exec(this->pDB, sql.c_str(), [](void* pram, int argc, char** argv, char** azColName, sqlite3_stmt* stmt)->int {
 			SEL_CALLBAC* callback = (SEL_CALLBAC*)pram;
 			return  callback->operator()(argc, argv, azColName, stmt);
 		}, &callback, &cErrMsg);
 }
-List<List<std::string>> SqliteHelper::Select(std::string sql)
-{
+List<List<std::string>> SqliteHelper::Select(std::string sql) {
 	char* cErrMsg = nullptr;
 	List<List<std::string>> result = List<List<std::string>>();
-	sqlite3_exec(this->pDB, sql.c_str(), [](void* pram, int argc, char** argv, char** azColName, sqlite3_stmt* stmt)->int
-		{
+	sqlite3_exec(this->pDB, sql.c_str(), [](void* pram, int argc, char** argv, char** azColName, sqlite3_stmt* stmt)->int {
 			List<List<std::string>>* list = (List<List<std::string>>*)pram;
 
 			List<std::string > row = List<std::string >();
-			for (int i = 0; i < argc; i++)
-			{
+			for (int i = 0; i < argc; i++) {
 				if (argv[i] && *argv[i])
 					row.Add(std::string(argv[i]));
 				else
@@ -94,8 +78,7 @@ List<List<std::string>> SqliteHelper::Select(std::string sql)
 		}, &result, &cErrMsg);
 	return result;
 }
-bool SqliteHelper::Insert(const std::string tableName, const std::vector<ColumnValue>& columnValues)
-{
+bool SqliteHelper::Insert(const std::string tableName, const std::vector<ColumnValue>& columnValues) {
 	std::string sql = "INSERT INTO " + tableName + " (";
 	std::string values = "(";
 
@@ -117,8 +100,7 @@ bool SqliteHelper::Insert(const std::string tableName, const std::vector<ColumnV
 		if (columnValues[i].value.size() == 0 || columnValues[i].value == "NULL" || columnValues[i].value == "null") {
 			sqlite3_bind_null(stmt, i + 1);
 		}
-		else 
-		{
+		else  {
 			switch (columnValues[i].DataType) {
 			case SqliteType::TEXT:
 				sqlite3_bind_text(stmt, i + 1, columnValues[i].value.c_str(), -1, SQLITE_TRANSIENT);
@@ -156,13 +138,11 @@ bool SqliteHelper::Insert(const std::string tableName, const std::vector<ColumnV
 	sqlite3_finalize(stmt);
 	return true;
 }
-int SqliteHelper::Excute(std::string sql)
-{
+int SqliteHelper::Excute(std::string sql) {
 	char* cErrMsg = nullptr;
 	return sqlite3_exec(pDB, sql.c_str(), NULL, NULL, &cErrMsg);
 }
-int SqliteHelper::Excute(const char* sql)
-{
+int SqliteHelper::Excute(const char* sql) {
 	char* cErrMsg = nullptr;
 	return sqlite3_exec(pDB, sql, NULL, NULL, &cErrMsg);
 }

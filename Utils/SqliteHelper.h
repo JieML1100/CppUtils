@@ -5,8 +5,7 @@
 
 
 
-enum class SqliteType
-{
+enum class SqliteType {
 	INT32,
 	INT64,
 	FLOAT,
@@ -18,8 +17,7 @@ enum class SqliteType
 typedef std::function<bool(int columns, char** colData, char** colNames, sqlite3_stmt* stmt)> SEL_CALLBAC;
 class ColumnValue {
 	template<typename T>
-	static SqliteType _getType(T v)
-	{
+	static SqliteType _getType(T v) {
 		if constexpr (std::is_same_v<T, int16_t>)
 			return SqliteType::INT32;
 		else if constexpr (std::is_same_v<T, uint16_t>)

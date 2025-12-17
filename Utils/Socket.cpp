@@ -1,4 +1,7 @@
-﻿#include "Socket.h"
+﻿#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include "Socket.h"
 #include <cstring>
 #include <sstream>
 #include <stdexcept>
@@ -10,8 +13,7 @@
 #pragma warning(disable: 4018)
 static WSADATA wsaData = { 0 };
 TCPSocket::TCPSocket() :Handle(NULL) {
-	if (wsaData.wVersion == 0)
-	{
+	if (wsaData.wVersion == 0) {
 		int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
 		if (result != NO_ERROR) {
 			std::ostringstream oss;
@@ -26,7 +28,7 @@ TCPSocket::TCPSocket() :Handle(NULL) {
 		throw std::runtime_error(oss.str());
 	}
 }
-TCPSocket::TCPSocket(SOCKET h) :Handle(h) {}
+TCPSocket::TCPSocket(UINT_PTR h) :Handle(h) {}
 TCPSocket::~TCPSocket() {
 	int result = closesocket(Handle);
 	if (result == SOCKET_ERROR) {
@@ -63,7 +65,7 @@ bool TCPSocket::Listen(int port, int backlog) {
 	return true;
 }
 TCPSocket* TCPSocket::Accept() {
-	SOCKET client = ::accept(Handle, NULL, NULL);
+	UINT_PTR client = ::accept(Handle, NULL, NULL);
 	if (client == INVALID_SOCKET) {
 		std::cerr << "Accept failed with error: " << WSAGetLastError() << std::endl;
 		return nullptr;
@@ -146,9 +148,7 @@ UDPSocket::~UDPSocket() {
 	Close();
 }
 
-bool UDPSocket::Bind(int port)
-
-{
+bool UDPSocket::Bind(int port) {
 	sockaddr_in address;
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;

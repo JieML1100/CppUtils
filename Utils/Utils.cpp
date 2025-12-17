@@ -16,15 +16,13 @@
 #pragma warning(disable: 4267)
 #pragma warning(disable: 4244)
 #pragma warning(disable: 4018)
-DWORD NtBuildVersion()
-{
+DWORD NtBuildVersion() {
 	static DWORD res = 0;
 	if (!res) {
 		typedef LONG(NTAPI* fnRtlGetVersion)(PRTL_OSVERSIONINFOW lpVersionInformation);
 		fnRtlGetVersion pRtlGetVersion = NULL;
-		while (pRtlGetVersion == 0)
-		{
-			HMODULE ntdll = GetModuleHandleA("ntdll.dll");
+		while (pRtlGetVersion == NULL) {
+			HMODULE ntdll = GetModuleHandle(TEXT("ntdll.dll"));
 			if (ntdll) {
 				pRtlGetVersion = (fnRtlGetVersion)GetProcAddress(ntdll, "RtlGetVersion");
 			}
@@ -35,8 +33,7 @@ DWORD NtBuildVersion()
 	}
 	return res;
 }
-std::vector<PATTERNVALUE> ParserPattern(std::string text)
-{
+std::vector<PATTERNVALUE> ParserPattern(std::string text) {
 #define IS_HEX(c) (((c) >= '0' && (c) <= '9') || ((c) >= 'a' && (c) <= 'f') || ((c) >= 'A' && (c) <= 'F'))
 #define HEX_TO_VALUE(c) (((c) >= '0' && (c) <= '9') ? (c) - '0' : ((c) >= 'a' && (c) <= 'f') ? (c) - 'a' + 10 : ((c) >= 'A' && (c) <= 'F') ? (c) - 'A' + 10 : 0)
 
@@ -96,36 +93,28 @@ std::vector<PATTERNVALUE> ParserPattern(std::string text)
 #undef HEX_TO_VALUE
 	return result;
 }
-void* FindU64(const char* szModule, ULONG64 value)
-{
+void* FindU64(const char* szModule, ULONG64 value) {
 	MODULEINFO mi{ };
-	if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(szModule), &mi, sizeof(mi)))
-	{
+	if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(szModule), &mi, sizeof(mi))) {
 		unsigned char* begin = (unsigned char*)mi.lpBaseOfDll;
 		DWORD size = mi.SizeOfImage;
-		for (unsigned char* p = begin; p <= (begin + size) - 8; p++)
-		{
-			if (*(ULONG64*)p == value)
-			{
+		for (unsigned char* p = begin; p <= (begin + size) - 8; p++) {
+			if (*(ULONG64*)p == value) {
 				return p;
 			}
 		}
 	}
 	return NULL;
 }
-void* FindPattern(const char* szModule, std::string sPattern, int offset)
-{
+void* FindPattern(const char* szModule, std::string sPattern, int offset) {
 	std::vector<PATTERNVALUE> pattern = ParserPattern(sPattern);
 	if (pattern.size() == 0) return NULL;
 	MODULEINFO mi{ };
-	if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(szModule), &mi, sizeof(mi)))
-	{
+	if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(szModule), &mi, sizeof(mi))) {
 		unsigned char* begin = (unsigned char*)mi.lpBaseOfDll;
 		DWORD size = mi.SizeOfImage;
-		for (unsigned char* curr = begin + offset; curr <= (begin + size) - pattern.size(); curr++)
-		{
-			for (int i = 0; i < pattern.size(); i++)
-			{
+		for (unsigned char* curr = begin + offset; curr <= (begin + size) - pattern.size(); curr++) {
+			for (int i = 0; i < pattern.size(); i++) {
 				if (pattern[i].ignore == 0x11) continue;
 				if (!pattern[i].ignore_left && ((curr[i] & 0xF0) >> 4) != pattern[i].left)goto nxt;
 				if (!pattern[i].ignore_right && (curr[i] & 0x0F) != pattern[i].right)goto nxt;
@@ -136,8 +125,7 @@ void* FindPattern(const char* szModule, std::string sPattern, int offset)
 	}
 	return NULL;
 }
-std::vector<void*> FindAllPattern(const char* szModule, std::string sPattern, int offset)
-{
+std::vector<void*> FindAllPattern(const char* szModule, std::string sPattern, int offset) {
 	std::vector<void*> result = std::vector<void*>();
 	std::vector<PATTERNVALUE> pattern = ParserPattern(sPattern);
 	if (pattern.size() == 0) return result;
@@ -147,19 +135,15 @@ std::vector<void*> FindAllPattern(const char* szModule, std::string sPattern, in
 		m = LoadLibraryA(szModule);
 	else
 		m = GetModuleHandle(NULL);
-	if (!m)
-	{
+	if (!m) {
 		printf("GetModule Infomation Failed!\n");
 		return result;
 	}
-	if (GetModuleInformation(GetCurrentProcess(), m, &mi, sizeof(mi)))
-	{
+	if (GetModuleInformation(GetCurrentProcess(), m, &mi, sizeof(mi))) {
 		unsigned char* begin = (unsigned char*)mi.lpBaseOfDll;
 		DWORD size = mi.SizeOfImage;
-		for (unsigned char* curr = begin + offset; curr <= (begin + size) - pattern.size(); curr++)
-		{
-			for (int i = 0; i < pattern.size(); i++)
-			{
+		for (unsigned char* curr = begin + offset; curr <= (begin + size) - pattern.size(); curr++) {
+			for (int i = 0; i < pattern.size(); i++) {
 				if (pattern[i].ignore == 0x11) continue;
 				if (!pattern[i].ignore_left && ((curr[i] & 0xF0) >> 4) != pattern[i].left)goto nxt;
 				if (!pattern[i].ignore_right && (curr[i] & 0x0F) != pattern[i].right)goto nxt;
@@ -168,21 +152,17 @@ std::vector<void*> FindAllPattern(const char* szModule, std::string sPattern, in
 		nxt:;
 		}
 	}
-	else
-	{
+	else {
 		printf("GetModule Infomation Failed!\n");
 	}
 	return result;
 }
-void* FindPattern(void* _begin, std::string sPattern, int search_size, int offset)
-{
+void* FindPattern(void* _begin, std::string sPattern, int search_size, int offset) {
 	std::vector<PATTERNVALUE> pattern = ParserPattern(sPattern);
 	if (pattern.size() == 0) return NULL;
 	unsigned char* begin = (unsigned char*)_begin;
-	for (unsigned char* curr = begin + offset; curr <= (begin + search_size) - pattern.size(); curr++)
-	{
-		for (int i = 0; i < pattern.size(); i++)
-		{
+	for (unsigned char* curr = begin + offset; curr <= (begin + search_size) - pattern.size(); curr++) {
+		for (int i = 0; i < pattern.size(); i++) {
 			if (pattern[i].ignore == 0x11) continue;
 			if (!pattern[i].ignore_left && ((curr[i] & 0xF0) >> 4) != pattern[i].left)goto nxt;
 			if (!pattern[i].ignore_right && (curr[i] & 0x0F) != pattern[i].right)goto nxt;
@@ -192,16 +172,13 @@ void* FindPattern(void* _begin, std::string sPattern, int search_size, int offse
 	}
 	return NULL;
 }
-std::vector<void*> FindAllPattern(void* _begin, std::string sPattern, int search_size, int offset)
-{
+std::vector<void*> FindAllPattern(void* _begin, std::string sPattern, int search_size, int offset) {
 	std::vector<void*> result = std::vector<void*>();
 	std::vector<PATTERNVALUE> pattern = ParserPattern(sPattern);
 	if (pattern.size() == 0) return result;
 	unsigned char* begin = (unsigned char*)_begin;
-	for (unsigned char* curr = begin + offset; curr <= (begin + search_size) - pattern.size(); curr++)
-	{
-		for (int i = 0; i < pattern.size(); i++)
-		{
+	for (unsigned char* curr = begin + offset; curr <= (begin + search_size) - pattern.size(); curr++) {
+		for (int i = 0; i < pattern.size(); i++) {
 			if (pattern[i].ignore == 0x11) continue;
 			if (!pattern[i].ignore_left && ((curr[i] & 0xF0) >> 4) != pattern[i].left)goto nxt;
 			if (!pattern[i].ignore_right && (curr[i] & 0x0F) != pattern[i].right)goto nxt;
@@ -211,25 +188,20 @@ std::vector<void*> FindAllPattern(void* _begin, std::string sPattern, int search
 	}
 	return result;
 }
-void PrintHex(void* ptr, int count, int splitLine)
-{
+void PrintHex(void* ptr, int count, int splitLine) {
 	const char keys[] = "0123456789ABCDEF";
 	uint8_t* tmp = (uint8_t*)ptr;
-	for (uint8_t* b = tmp; b < tmp + count; b += splitLine)
-	{
-		for (int j = 0; j < splitLine && b + j < tmp + count; j++)
-		{
+	for (uint8_t* b = tmp; b < tmp + count; b += splitLine) {
+		for (int j = 0; j < splitLine && b + j < tmp + count; j++) {
 			printf("%c%c ", keys[b[j] / 0x10], keys[b[j] % 0x10]);
 		}
 		printf("\n");
 	}
 }
-void PrintHex(void* ptr, int count)
-{
+void PrintHex(void* ptr, int count) {
 	const char keys[] = "0123456789ABCDEF";
 	uint8_t* tmp = (uint8_t*)ptr;
-	for (uint8_t* b = tmp; b < tmp + count; b++)
-	{
+	for (uint8_t* b = tmp; b < tmp + count; b++) {
 		printf("%c%c ", keys[*b / 0x10], keys[*b % 0x10]);
 	}
 }
@@ -245,8 +217,7 @@ void MakePermute(std::vector<int> nums, std::vector<std::vector<int>>& result, i
 		std::swap(nums[start], nums[i]);
 	}
 }
-std::wstring GetErrorMessage(DWORD err)
-{
+std::wstring GetErrorMessage(DWORD err) {
 	LPWSTR errorMsgBuffer = NULL;
 	DWORD size = FormatMessageW(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
@@ -257,32 +228,27 @@ std::wstring GetErrorMessage(DWORD err)
 		0,
 		nullptr
 	);
-	if (size > 0)
-	{
+	if (size > 0) {
 		std::wstring emsg = std::wstring(errorMsgBuffer);
 		LocalFree(errorMsgBuffer);
 		return emsg;
 	}
 	return L"Unknown error";
 }
-PIMAGE_NT_HEADERS RtlImageNtHeader(PVOID Base)
-{
+PIMAGE_NT_HEADERS RtlImageNtHeader(PVOID Base) {
 	static PIMAGE_NT_HEADERS(*_RtlImageNtHeader)(PVOID Base) = NULL;
-	if (_RtlImageNtHeader == NULL)
-	{
-		HMODULE NtBase = GetModuleHandleA("ntdll.dll");
+	if (_RtlImageNtHeader == NULL) {
+		HMODULE NtBase = GetModuleHandle(TEXT("ntdll.dll"));
 		_RtlImageNtHeader = (decltype(_RtlImageNtHeader))GetProcAddress(NtBase, "RtlImageNtHeader");
 	}
 	return _RtlImageNtHeader(Base);
 }
-SIZE_T GetSectionSize(_In_ PVOID DllBase)
-{
+SIZE_T GetSectionSize(_In_ PVOID DllBase) {
 	PIMAGE_NT_HEADERS pNTHeader = RtlImageNtHeader(DllBase);
 	PIMAGE_SECTION_HEADER pSectionHeader = (PIMAGE_SECTION_HEADER)((DWORD64)pNTHeader + sizeof(IMAGE_NT_HEADERS64));
 	ULONG nAlign = pNTHeader->OptionalHeader.SectionAlignment;
 	SIZE_T ImageSize = (pNTHeader->OptionalHeader.SizeOfHeaders + nAlign - 1) / nAlign * nAlign;
-	for (int i = 0; i < pNTHeader->FileHeader.NumberOfSections; ++i)
-	{
+	for (int i = 0; i < pNTHeader->FileHeader.NumberOfSections; ++i) {
 		int CodeSize = pSectionHeader[i].Misc.VirtualSize;
 		int LoadSize = pSectionHeader[i].SizeOfRawData;
 		int MaxSize = (LoadSize > CodeSize) ? (LoadSize) : (CodeSize);
@@ -292,8 +258,7 @@ SIZE_T GetSectionSize(_In_ PVOID DllBase)
 	}
 	return ImageSize;
 }
-void EnableDump()
-{
+void EnableDump() {
 	SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
 	SetUnhandledExceptionFilter([](EXCEPTION_POINTERS* exceptionInfo) -> LONG {
 		char processPath[MAX_PATH];
@@ -319,22 +284,11 @@ List<void*> CaptureStackTraceEx() {
 	for (int i = 0; i < MAX_STACKTRACE; ++i) {
 		DWORD64 address = reinterpret_cast<DWORD64>(stack[i]);
 		result.Add((void*)address);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 	return result;
 }
 #ifdef ZLIB_VERSION
-std::vector<uint8_t> Compress(uint8_t* buffer, int len)
-{
+std::vector<uint8_t> Compress(uint8_t* buffer, int len) {
 	std::vector<uint8_t> result = std::vector<uint8_t>();
 	uLong destLen = compressBound(len);
 	unsigned char* ostream = (unsigned char*)malloc(destLen);
@@ -351,8 +305,7 @@ std::vector<uint8_t> Compress(uint8_t* buffer, int len)
 
 	return result;
 }
-std::vector<uint8_t> Decompress(uint8_t* buffer, int len, int maxlen)
-{
+std::vector<uint8_t> Decompress(uint8_t* buffer, int len, int maxlen) {
 	uLong destLen = maxlen;
 	std::vector<uint8_t> result = std::vector<uint8_t>();
 	uint8_t* o2stream = new uint8_t[maxlen];
@@ -414,8 +367,7 @@ std::vector<uint8_t> GDecompress(std::vector<uint8_t> compressedBytes) {
 	free(uncomp);
 	return uncompressedBytes;
 }
-std::vector<uint8_t> GCompress(std::vector<uint8_t> input)
-{
+std::vector<uint8_t> GCompress(std::vector<uint8_t> input) {
 	std::vector<uint8_t> res = std::vector<uint8_t>();
 	res.resize(input.size());
 	z_stream zs;
@@ -484,8 +436,7 @@ std::vector<uint8_t> GDecompress(uint8_t* compressedBytes, ULONG len) {
 	free(uncomp);
 	return uncompressedBytes;
 }
-std::vector<uint8_t> GCompress(uint8_t* input, ULONG len)
-{
+std::vector<uint8_t> GCompress(uint8_t* input, ULONG len) {
 	std::vector<uint8_t> res = std::vector<uint8_t>();
 	res.resize(len);
 	z_stream zs;
@@ -502,35 +453,29 @@ std::vector<uint8_t> GCompress(uint8_t* input, ULONG len)
 	res.resize(zs.total_out);
 	return res;
 }
-std::vector<uint8_t> GCompress(std::initializer_list<uint8_t> input)
-{
+std::vector<uint8_t> GCompress(std::initializer_list<uint8_t> input) {
 	return GCompress((uint8_t*)input.begin(), input.size());
 }
-std::vector<uint8_t> GCompress(std::initializer_list<uint8_t>* input)
-{
+std::vector<uint8_t> GCompress(std::initializer_list<uint8_t>* input) {
 	return GCompress((uint8_t*)input->begin(), input->size());
 }
-std::string MakeDialogFilterStrring(std::string description, std::vector<std::string> filter)
-{
+std::string MakeDialogFilterStrring(std::string description, std::vector<std::string> filter) {
 	std::string result = description;
 	result.append("(");
-	for (auto& str : filter)
-	{
+	for (auto& str : filter) {
 		result.append(str);
 		result.append(";");
 	}
 	result.append(")");
 	result.append(1, '\0');
-	for (auto& str : filter)
-	{
+	for (auto& str : filter) {
 		result.append(str);
 		result.append(";");
 	}
 	result.append(2, '\0');
 	return result;
 }
-std::string MakeDialogFilterStrring(std::string description, std::string filter)
-{
+std::string MakeDialogFilterStrring(std::string description, std::string filter) {
 	std::string result = description;
 	result.append("(");
 	result.append(filter);

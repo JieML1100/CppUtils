@@ -3,8 +3,7 @@
 #include <Winhttp.h>
 
 #pragma comment(lib, "winhttp.lib")
-std::string HttpHelper::UrlEncode(const std::string str)
-{
+std::string HttpHelper::UrlEncode(const std::string str) {
 	auto input = Convert::AnsiToUtf8(str);
 	std::ostringstream encoded;
 	for (uint8_t c : input) {
@@ -19,8 +18,7 @@ std::string HttpHelper::UrlEncode(const std::string str)
 	}
 	return encoded.str();
 }
-std::string HttpHelper::CheckUrl(std::string input)
-{
+std::string HttpHelper::CheckUrl(std::string input) {
 	auto replace = [](std::string str, const char* old_str, const char* new_str) {
 		size_t len_old = strlen(old_str);
 		size_t len_new = strlen(new_str);
@@ -52,12 +50,10 @@ std::string HttpHelper::CheckUrl(std::string input)
 	return UrlEncode(input);
 }
 std::string HttpHelper::GetHostNameFromURL(std::string url) {
-	if (url._Starts_with("https://"))
-	{
+	if (url._Starts_with("https://")) {
 		url;
 	}
-	else if (!url._Starts_with("http://"))
-	{
+	else if (!url._Starts_with("http://")) {
 		url = "http://" + url;
 	}
 	std::string hostName;
@@ -74,8 +70,7 @@ std::string HttpHelper::GetHostNameFromURL(std::string url) {
 	}
 	return hostName;
 }
-std::string HttpHelper::Get(std::string url, std::string headers, std::string cookies)
-{
+std::string HttpHelper::Get(std::string url, std::string headers, std::string cookies) {
 	HINTERNET hSession = nullptr, hConnect = nullptr, hRequest = nullptr;
 	std::string response;
 	url = UrlEncode(url);
@@ -203,8 +198,7 @@ std::string HttpHelper::Get(std::string url, std::string headers, std::string co
 
 	return response;
 }
-std::string HttpHelper::GetStream(std::string url, std::string headers, std::string cookies, HTTP_STREAM_CALLBACK callback)
-{
+std::string HttpHelper::GetStream(std::string url, std::string headers, std::string cookies, HTTP_STREAM_CALLBACK callback) {
 	HINTERNET hSession = nullptr, hConnect = nullptr, hRequest = nullptr;
 	std::string response;
 	url = UrlEncode(url);
@@ -338,8 +332,7 @@ std::vector<uint8_t> HttpHelper::HttpGetBytes(std::string url) {
 	auto bytes = Get(url);
 	return std::vector<uint8_t>((uint8_t*)bytes.data(), (uint8_t*)bytes.data() + bytes.size());
 }
-std::string HttpHelper::Post(std::string url, std::string body, std::string headers, std::string cookies)
-{
+std::string HttpHelper::Post(std::string url, std::string body, std::string headers, std::string cookies) {
 	HINTERNET hSession = nullptr, hConnect = nullptr, hRequest = nullptr;
 	std::string response;
 	url = UrlEncode(url);
@@ -467,8 +460,7 @@ std::string HttpHelper::Post(std::string url, std::string body, std::string head
 
 	return response;
 }
-std::string HttpHelper::PostStream(std::string url, std::string body, std::string headers, std::string cookies, HTTP_STREAM_CALLBACK callback)
-{
+std::string HttpHelper::PostStream(std::string url, std::string body, std::string headers, std::string cookies, HTTP_STREAM_CALLBACK callback) {
 	HINTERNET hSession = nullptr, hConnect = nullptr, hRequest = nullptr;
 	std::string response;
 	url = UrlEncode(url);

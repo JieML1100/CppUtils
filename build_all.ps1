@@ -37,25 +37,111 @@ if (-not (Test-Path $BuildDir)) {
     New-Item -ItemType Directory -Path $BuildDir -Force | Out-Null
 }
 
-# Find MSBuild
+# Find all installed Visual Studio versions
 $msbuildPath = $null
 $vsWhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
 
-if (Test-Path $vsWhere) {
-    $vsPath = & $vsWhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
-    if ($vsPath) {
-        $msbuildPath = Join-Path $vsPath "MSBuild\Current\Bin\MSBuild.exe"
-        if (-not (Test-Path $msbuildPath)) {
-            $msbuildPath = Join-Path $vsPath "MSBuild\15.0\Bin\MSBuild.exe"
-        }
-    }
-}
-
-if (-not $msbuildPath -or -not (Test-Path $msbuildPath)) {
-    Write-Error-Custom "MSBuild not found. Please install Visual Studio or Build Tools."
+if (-not (Test-Path $vsWhere)) {
+    Write-Error-Custom "vswhere.exe not found. Please install Visual Studio or Build Tools."
     exit 1
 }
 
+# Get all installed Visual Studio instances
+$vsInstances = & $vsWhere -all -products * -requires Microsoft.Component.MSBuild -format json | ConvertFrom-Json
+
+if (-not $vsInstances -or $vsInstances.Count -eq 0) {
+    Write-Error-Custom "No Visual Studio installation found with MSBuild component."
+    exit 1
+}
+
+# Display all available compilers
+Write-Info "=" * 80
+Write-Info "Available Visual Studio Installations:"
+Write-Info "=" * 80
+Write-Host ""
+
+$vsOptions = @()
+$index = 1
+
+foreach ($vs in $vsInstances) {
+    $vsVersion = $vs.installationVersion
+    $vsName = $vs.displayName
+    $vsPath = $vs.installationPath
+    
+    # Try to find MSBuild path (prefer 64-bit)
+    $msbuild = Join-Path $vsPath "MSBuild\Current\Bin\amd64\MSBuild.exe"
+    if (-not (Test-Path $msbuild)) {
+        $msbuild = Join-Path $vsPath "MSBuild\Current\Bin\MSBuild.exe"
+    }
+    if (-not (Test-Path $msbuild)) {
+        $msbuild = Join-Path $vsPath "MSBuild\15.0\Bin\amd64\MSBuild.exe"
+    }
+    if (-not (Test-Path $msbuild)) {
+        $msbuild = Join-Path $vsPath "MSBuild\15.0\Bin\MSBuild.exe"
+    }
+    
+    if (Test-Path $msbuild) {
+        # Get toolset version
+        $toolset = ""
+        if ($vsVersion -match "^17\.") {
+            $toolset = "v143 (Visual Studio 2022)"
+        } elseif ($vsVersion -match "^16\.") {
+            $toolset = "v142 (Visual Studio 2019)"
+        } elseif ($vsVersion -match "^15\.") {
+            $toolset = "v141 (Visual Studio 2017)"
+        } else {
+            $toolset = "v$($vsVersion.Split('.')[0])"
+        }
+        
+        Write-Host "[$index] $vsName" -ForegroundColor Green
+        Write-Host "    Version: $vsVersion" -ForegroundColor Gray
+        Write-Host "    Toolset: $toolset" -ForegroundColor Gray
+        Write-Host "    Path: $vsPath" -ForegroundColor Gray
+        Write-Host "    MSBuild: $msbuild" -ForegroundColor Gray
+        Write-Host ""
+        
+        $vsOptions += @{
+            Index = $index
+            Name = $vsName
+            Version = $vsVersion
+            Path = $vsPath
+            MSBuild = $msbuild
+            Toolset = $toolset
+        }
+        $index++
+    }
+}
+
+if ($vsOptions.Count -eq 0) {
+    Write-Error-Custom "No valid MSBuild installation found."
+    exit 1
+}
+
+# Let user select
+Write-Info "=" * 80
+Write-Host "Please select a compiler (1-$($vsOptions.Count)), or press Enter to use the latest: " -NoNewline -ForegroundColor Cyan
+$selection = Read-Host
+
+$selectedVS = $null
+
+if ([string]::IsNullOrWhiteSpace($selection)) {
+    # Use the first one (usually the latest)
+    $selectedVS = $vsOptions[0]
+    Write-Info "Using default (latest): $($selectedVS.Name)"
+} else {
+    $selectionNum = 0
+    if ([int]::TryParse($selection, [ref]$selectionNum) -and $selectionNum -ge 1 -and $selectionNum -le $vsOptions.Count) {
+        $selectedVS = $vsOptions[$selectionNum - 1]
+        Write-Success "Selected: $($selectedVS.Name)"
+    } else {
+        Write-Error-Custom "Invalid selection. Please enter a number between 1 and $($vsOptions.Count)."
+        exit 1
+    }
+}
+
+$msbuildPath = $selectedVS.MSBuild
+
+Write-Host ""
 Write-Info "Using MSBuild: $msbuildPath"
 Write-Info "Solution: $SolutionFile"
 Write-Info ""
@@ -150,6 +236,7 @@ foreach ($project in $projects) {
             "/p:Configuration=$configuration",
             "/p:Platform=$platform",
             "/p:ForceImportBeforeCppTargets=$tempPropsFile",
+            "/p:PreferredToolArchitecture=x64",
             "/v:minimal",
             "/nologo",
             "/m"

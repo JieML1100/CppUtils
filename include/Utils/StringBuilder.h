@@ -2,8 +2,7 @@
 #include "defines.h"
 #include <string>
 #include <sstream>
-class StringBuilder
-{
+class StringBuilder {
 private:
 	std::stringstream buffer;
 public:
@@ -53,8 +52,7 @@ public:
 	std::wstring ToWString();
 	void Clear();
 	template<typename T>
-	StringBuilder& operator << (T str)
-	{
+	StringBuilder& operator << (T str) {
 		this->Append(str);
 		return *this;
 	}

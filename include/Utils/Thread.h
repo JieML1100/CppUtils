@@ -10,16 +10,13 @@
 #include <chrono>
 
 template <typename T>
-class TaskRunning
-{
+class TaskRunning {
 public:
 	explicit TaskRunning(std::future<T> r) : run_(std::move(r)) {}
-	bool IsComplete()
-	{
+	bool IsComplete() {
 		return run_.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready;
 	}
-	auto Get()
-	{
+	auto Get() {
 		return run_.get();
 	}
 
@@ -27,12 +24,10 @@ private:
 	std::future<T> run_;
 };
 
-class TaskBase
-{
+class TaskBase {
 public:
 	template <typename Func, typename... Args>
-	static __forceinline TaskRunning<typename std::invoke_result<Func, Args...>::type> Run(Func&& f, Args&&... args)
-	{
+	static __forceinline TaskRunning<typename std::invoke_result<Func, Args...>::type> Run(Func&& f, Args&&... args) {
 		using ReturnType = typename std::invoke_result<Func, Args...>::type;
 		return TaskRunning<ReturnType>(
 			std::async(std::launch::async, std::forward<Func>(f), std::forward<Args>(args)...));
@@ -40,13 +35,11 @@ public:
 };
 
 template <typename Func>
-class Task
-{
+class Task {
 public:
 	explicit Task(Func f) : func_(std::move(f)) {}
 	template <typename... Args>
-	__forceinline TaskRunning<typename std::invoke_result<Func, Args...>::type> Start(Args&&... args)
-	{
+	__forceinline TaskRunning<typename std::invoke_result<Func, Args...>::type> Start(Args&&... args) {
 		using ReturnType = typename std::invoke_result<Func, Args...>::type;
 		return TaskRunning<ReturnType>(
 			std::async(std::launch::async, func_, std::forward<Args>(args)...));

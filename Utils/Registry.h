@@ -2,8 +2,7 @@
 #include "defines.h"
 #include <string>
 #include <vector>
-class RegistryKey
-{
+class RegistryKey {
 public:
 	HKEY hKey;
 	RegistryKey(HKEY _hKey);
@@ -22,8 +21,7 @@ public:
 	std::vector<std::string> GetValueNames();
 	void Close();
 };
-static class Registry
-{
+static class Registry {
 public:
 	static RegistryKey ClassesRoot;
 	static RegistryKey CurrentConfig;

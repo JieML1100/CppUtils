@@ -15,8 +15,7 @@
 #pragma warning(disable: 4244)
 #pragma warning(disable: 4018)
 
-static constexpr const uint16_t hexTable[] =
-{
+static constexpr const uint16_t hexTable[] = {
 	0x3030,0x3130,0x3230,0x3330,0x3430,0x3530,0x3630,0x3730,0x3830,0x3930,0x4130,0x4230,0x4330,0x4430,0x4530,0x4630,
 	0x3031,0x3131,0x3231,0x3331,0x3431,0x3531,0x3631,0x3731,0x3831,0x3931,0x4131,0x4231,0x4331,0x4431,0x4531,0x4631,
 	0x3032,0x3132,0x3232,0x3332,0x3432,0x3532,0x3632,0x3732,0x3832,0x3932,0x4132,0x4232,0x4332,0x4432,0x4532,0x4632,
@@ -34,8 +33,7 @@ static constexpr const uint16_t hexTable[] =
 	0x3045,0x3145,0x3245,0x3345,0x3445,0x3545,0x3645,0x3745,0x3845,0x3945,0x4145,0x4245,0x4345,0x4445,0x4545,0x4645,
 	0x3046,0x3146,0x3246,0x3346,0x3446,0x3546,0x3646,0x3746,0x3846,0x3946,0x4146,0x4246,0x4346,0x4446,0x4546,0x4646,
 };
-static constexpr const uint32_t hexTableW[] =
-{
+static constexpr const uint32_t hexTableW[] = {
 	0x300030,0x310030,0x320030,0x330030,0x340030,0x350030,0x360030,0x370030,0x380030,0x390030,0x410030,0x420030,0x430030,0x440030,0x450030,0x460030,
 	0x300031,0x310031,0x320031,0x330031,0x340031,0x350031,0x360031,0x370031,0x380031,0x390031,0x410031,0x420031,0x430031,0x440031,0x450031,0x460031,
 	0x300032,0x310032,0x320032,0x330032,0x340032,0x350032,0x360032,0x370032,0x380032,0x390032,0x410032,0x420032,0x430032,0x440032,0x450032,0x460032,
@@ -53,8 +51,7 @@ static constexpr const uint32_t hexTableW[] =
 	0x300045,0x310045,0x320045,0x330045,0x340045,0x350045,0x360045,0x370045,0x380045,0x390045,0x410045,0x420045,0x430045,0x440045,0x450045,0x460045,
 	0x300046,0x310046,0x320046,0x330046,0x340046,0x350046,0x360046,0x370046,0x380046,0x390046,0x410046,0x420046,0x430046,0x440046,0x450046,0x460046,
 };
-static constexpr const uint8_t base64_table[] =
-{
+static constexpr const uint8_t base64_table[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3E,0x00,0x00,0x00,0x3F,
@@ -72,8 +69,7 @@ static constexpr const uint8_t base64_table[] =
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 };
-static constexpr const uint8_t base85_table[] =
-{
+static constexpr const uint8_t base85_table[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,
@@ -91,8 +87,7 @@ static constexpr const uint8_t base85_table[] =
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 };
-static constexpr const uint8_t hex_table_str[] =
-{
+static constexpr const uint8_t hex_table_str[] = {
 	0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
 	0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
 	0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
@@ -110,40 +105,35 @@ static constexpr const uint8_t hex_table_str[] =
 	0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
 	0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
 };
-std::string Convert::ToHex(const uint8_t input)
-{
+std::string Convert::ToHex(const uint8_t input) {
 	const char keyTable[] = "0123456789ABCDEF";
 	std::string output(2, '\0');
 	output[0x1] = keyTable[(*(uint8_t*)&input & 0x0F) >> 0x00];
 	output[0x0] = keyTable[(*(uint8_t*)&input & 0xF0) >> 0x04];
 	return output;
 }
-std::string Convert::ToHex(const int8_t input)
-{
+std::string Convert::ToHex(const int8_t input) {
 	const char keyTable[] = "0123456789ABCDEF";
 	std::string output(2, '\0');
 	output[0x1] = keyTable[(*(uint8_t*)&input & 0x0F) >> 0x00];
 	output[0x0] = keyTable[(*(uint8_t*)&input & 0xF0) >> 0x04];
 	return output;
 }
-std::wstring Convert::ToHexW(const uint8_t input)
-{
+std::wstring Convert::ToHexW(const uint8_t input) {
 	const wchar_t keyTable[] = L"0123456789ABCDEF";
 	std::wstring output(2, '\0');
 	output[0x1] = keyTable[(*(uint8_t*)&input & 0x0F) >> 0x00];
 	output[0x0] = keyTable[(*(uint8_t*)&input & 0xF0) >> 0x04];
 	return output;
 }
-std::wstring Convert::ToHexW(const int8_t input)
-{
+std::wstring Convert::ToHexW(const int8_t input) {
 	const wchar_t keyTable[] = L"0123456789ABCDEF";
 	std::wstring output(2, '\0');
 	output[0x1] = keyTable[(*(uint8_t*)&input & 0x0F) >> 0x00];
 	output[0x0] = keyTable[(*(uint8_t*)&input & 0xF0) >> 0x04];
 	return output;
 }
-std::string Convert::ToHex(const uint16_t input)
-{
+std::string Convert::ToHex(const uint16_t input) {
 	const char keyTable[] = "0123456789ABCDEF";
 	std::string output(4, '\0');
 	output[0x3] = keyTable[(*(uint16_t*)&input & 0x000F) >> 0x00];
@@ -152,8 +142,7 @@ std::string Convert::ToHex(const uint16_t input)
 	output[0x0] = keyTable[(*(uint16_t*)&input & 0xF000) >> 0x0C];
 	return output;
 }
-std::string Convert::ToHex(const int16_t input)
-{
+std::string Convert::ToHex(const int16_t input) {
 	const char keyTable[] = "0123456789ABCDEF";
 	std::string output(4, '\0');
 	output[0x3] = keyTable[(*(uint16_t*)&input & 0x000F) >> 0x00];
@@ -162,8 +151,7 @@ std::string Convert::ToHex(const int16_t input)
 	output[0x0] = keyTable[(*(uint16_t*)&input & 0xF000) >> 0x0C];
 	return output;
 }
-std::wstring Convert::ToHexW(const uint16_t input)
-{
+std::wstring Convert::ToHexW(const uint16_t input) {
 	const wchar_t keyTable[] = L"0123456789ABCDEF";
 	std::wstring output(4, '\0');
 	output[0x3] = keyTable[(*(uint16_t*)&input & 0x000F) >> 0x00];
@@ -172,8 +160,7 @@ std::wstring Convert::ToHexW(const uint16_t input)
 	output[0x0] = keyTable[(*(uint16_t*)&input & 0xF000) >> 0x0C];
 	return output;
 }
-std::wstring Convert::ToHexW(const int16_t input)
-{
+std::wstring Convert::ToHexW(const int16_t input) {
 	const wchar_t keyTable[] = L"0123456789ABCDEF";
 	std::wstring output(4, '\0');
 	output[0x3] = keyTable[(*(uint16_t*)&input & 0x000F) >> 0x00];
@@ -182,8 +169,7 @@ std::wstring Convert::ToHexW(const int16_t input)
 	output[0x0] = keyTable[(*(uint16_t*)&input & 0xF000) >> 0x0C];
 	return output;
 }
-std::string Convert::ToHex(const uint32_t input)
-{
+std::string Convert::ToHex(const uint32_t input) {
 	const char keyTable[] = "0123456789ABCDEF";
 	std::string output(8, '\0');
 	output[0x7] = keyTable[(*(uint32_t*)&input & 0x0000000F) >> 0x00];
@@ -196,8 +182,7 @@ std::string Convert::ToHex(const uint32_t input)
 	output[0x0] = keyTable[(*(uint32_t*)&input & 0xF0000000) >> 0x1C];
 	return output;
 }
-std::string Convert::ToHex(const int32_t input)
-{
+std::string Convert::ToHex(const int32_t input) {
 	const char keyTable[] = "0123456789ABCDEF";
 	std::string output(8, '\0');
 	output[0x7] = keyTable[(*(uint32_t*)&input & 0x0000000F) >> 0x00];
@@ -210,8 +195,7 @@ std::string Convert::ToHex(const int32_t input)
 	output[0x0] = keyTable[(*(uint32_t*)&input & 0xF0000000) >> 0x1C];
 	return output;
 }
-std::wstring Convert::ToHexW(const uint32_t input)
-{
+std::wstring Convert::ToHexW(const uint32_t input) {
 	const wchar_t keyTable[] = L"0123456789ABCDEF";
 	std::wstring output(8, '\0');
 	output[0x7] = keyTable[(*(uint32_t*)&input & 0x0000000F) >> 0x00];
@@ -224,8 +208,7 @@ std::wstring Convert::ToHexW(const uint32_t input)
 	output[0x0] = keyTable[(*(uint32_t*)&input & 0xF0000000) >> 0x1C];
 	return output;
 }
-std::wstring Convert::ToHexW(const int32_t input)
-{
+std::wstring Convert::ToHexW(const int32_t input) {
 	const wchar_t keyTable[] = L"0123456789ABCDEF";
 	std::wstring output(8, '\0');
 	output[0x7] = keyTable[(*(uint32_t*)&input & 0x0000000F) >> 0x00];
@@ -238,8 +221,7 @@ std::wstring Convert::ToHexW(const int32_t input)
 	output[0x0] = keyTable[(*(uint32_t*)&input & 0xF0000000) >> 0x1C];
 	return output;
 }
-std::string Convert::ToHex(const uint64_t input)
-{
+std::string Convert::ToHex(const uint64_t input) {
 	const char keyTable[] = "0123456789ABCDEF";
 	std::string output(16, '\0');
 	output[0xF] = keyTable[(*(uint64_t*)&input & 0x000000000000000F) >> 0x00];
@@ -260,8 +242,7 @@ std::string Convert::ToHex(const uint64_t input)
 	output[0x0] = keyTable[(*(uint64_t*)&input & 0xF000000000000000) >> 0x3C];
 	return output;
 }
-std::string Convert::ToHex(const int64_t input)
-{
+std::string Convert::ToHex(const int64_t input) {
 	const char keyTable[] = "0123456789ABCDEF";
 	std::string output(16, '\0');
 	output[0xF] = keyTable[(*(uint64_t*)&input & 0x000000000000000F) >> 0x00];
@@ -282,8 +263,7 @@ std::string Convert::ToHex(const int64_t input)
 	output[0x0] = keyTable[(*(uint64_t*)&input & 0xF000000000000000) >> 0x3C];
 	return output;
 }
-std::wstring Convert::ToHexW(const uint64_t input)
-{
+std::wstring Convert::ToHexW(const uint64_t input) {
 	const wchar_t keyTable[] = L"0123456789ABCDEF";
 	std::wstring output(16, '\0');
 	output[0xF] = keyTable[(*(uint64_t*)&input & 0x000000000000000F) >> 0x00];
@@ -304,8 +284,7 @@ std::wstring Convert::ToHexW(const uint64_t input)
 	output[0x0] = keyTable[(*(uint64_t*)&input & 0xF000000000000000) >> 0x3C];
 	return output;
 }
-std::wstring Convert::ToHexW(const int64_t input)
-{
+std::wstring Convert::ToHexW(const int64_t input) {
 	const wchar_t keyTable[] = L"0123456789ABCDEF";
 	std::wstring output(16, '\0');
 	output[0xF] = keyTable[(*(uint64_t*)&input & 0x000000000000000F) >> 0x00];
@@ -326,8 +305,7 @@ std::wstring Convert::ToHexW(const int64_t input)
 	output[0x0] = keyTable[(*(uint64_t*)&input & 0xF000000000000000) >> 0x3C];
 	return output;
 }
-std::string Convert::ToHex(const void* input, size_t size)
-{
+std::string Convert::ToHex(const void* input, size_t size) {
 	std::string result(size * 2, '\0');
 	uint16_t* rTmp = (uint16_t*)&result[0];
 	uint8_t* rVal = (uint8_t*)input;
@@ -335,8 +313,7 @@ std::string Convert::ToHex(const void* input, size_t size)
 		*rTmp++ = hexTable[*rVal++];
 	return result;
 }
-std::wstring Convert::ToHexW(const void* input, size_t size)
-{
+std::wstring Convert::ToHexW(const void* input, size_t size) {
 	std::wstring result(size * 2, '\0');
 	uint32_t* rTmp = (uint32_t*)&result[0];
 	uint8_t* rVal = (uint8_t*)input;
@@ -344,18 +321,14 @@ std::wstring Convert::ToHexW(const void* input, size_t size)
 		*rTmp++ = *(uint32_t*)&hexTableW[*rVal++];
 	return result;
 }
-std::vector<uint8_t> Convert::FromHex(const std::string hex)
-{
+std::vector<uint8_t> Convert::FromHex(const std::string hex) {
 	std::vector<uint8_t> result = std::vector<uint8_t>();
 	uint8_t _highBits = 0;
 	bool ish = true;
-	for (const char& c : hex)
-	{
+	for (const char& c : hex) {
 		uint8_t v = hex_table_str[c];
-		if (v == 0x10)
-		{
-			if (!ish)
-			{
+		if (v == 0x10) {
+			if (!ish) {
 				result.push_back(_highBits);
 				ish = true;
 			}
@@ -372,20 +345,16 @@ std::vector<uint8_t> Convert::FromHex(const std::string hex)
 	return result;
 
 }
-std::vector<uint8_t> Convert::FromHex(const std::wstring hex)
-{
+std::vector<uint8_t> Convert::FromHex(const std::wstring hex) {
 	std::vector<uint8_t> result = std::vector<uint8_t>();
 	uint8_t _highBits = 0;
 	bool ish = true;
-	for (const wchar_t& c : hex)
-	{
+	for (const wchar_t& c : hex) {
 		if (c > 0xFF)
 			continue;
 		uint8_t v = hex_table_str[c];
-		if (v == 0x10)
-		{
-			if (!ish)
-			{
+		if (v == 0x10) {
+			if (!ish) {
 				result.push_back(_highBits);
 				ish = true;
 			}
@@ -542,8 +511,7 @@ std::string Convert::FromBase64(const std::string input) {
 
 	return output;
 }
-std::vector<uint8_t> Convert::FromBase64ToBytes(const std::string input)
-{
+std::vector<uint8_t> Convert::FromBase64ToBytes(const std::string input) {
 	auto tmp = FromBase64(input);
 	return std::vector<uint8_t>((uint8_t*)&tmp[0], (uint8_t*)&tmp[0] + tmp.size());
 }
@@ -609,8 +577,7 @@ std::string Convert::ToBase85(const std::string input) {
 	output.resize(index);
 	return output;
 }
-std::string Convert::FromBase85(const std::string input)
-{
+std::string Convert::FromBase85(const std::string input) {
 	size_t input_length = input.size();
 	size_t output_length = ((input_length + 4) / 5) * 4;
 	std::string output(output_length, '\0');
@@ -662,66 +629,55 @@ std::string Convert::FromBase85(const std::string input)
 	output.resize(index);
 	return output;
 }
-std::string Convert::ToBase85(const std::vector<uint8_t>& input)
-{
+std::string Convert::ToBase85(const std::vector<uint8_t>& input) {
 	return ToBase85(std::string((char*)input.data(), input.size()));
 }
-std::vector<uint8_t> Convert::FromBase85ToBytes(const std::string input)
-{
+std::vector<uint8_t> Convert::FromBase85ToBytes(const std::string input) {
 	auto tmp = FromBase85(input);
 	return std::vector<uint8_t>((uint8_t*)&tmp[0], (uint8_t*)&tmp[0] + tmp.size());
 }
-std::string Convert::CalcMD5(const void* data, size_t size)
-{
+std::string Convert::CalcMD5(const void* data, size_t size) {
 	MD5 md5;
 	md5.update(reinterpret_cast<const uint8_t*>(data), size);
 	md5.finalize();
 	return md5.hexdigest();
 }
-std::string Convert::CalcSHA256(const void* data, size_t size)
-{
+std::string Convert::CalcSHA256(const void* data, size_t size) {
 	SHA256 sha256;
 	sha256.update(reinterpret_cast<const uint8_t*>(data), size);
 	sha256.finalize();
 	return sha256.hexdigest();
 }
-std::string Convert::CalcMD5(const std::vector<uint8_t>& data)
-{
+std::string Convert::CalcMD5(const std::vector<uint8_t>& data) {
 	MD5 md5;
 	md5.update(reinterpret_cast<const uint8_t*>(data.data()), data.size());
 	md5.finalize();
 	return md5.hexdigest();
 }
-std::string Convert::CalcSHA256(const std::vector<uint8_t>& data)
-{
+std::string Convert::CalcSHA256(const std::vector<uint8_t>& data) {
 	SHA256 sha256;
 	sha256.update(reinterpret_cast<const uint8_t*>(data.data()), data.size());
 	sha256.finalize();
 	return sha256.hexdigest();
 }
-std::string Convert::CalcMD5(const std::string& data)
-{
+std::string Convert::CalcMD5(const std::string& data) {
 	MD5 md5;
 	md5.update(reinterpret_cast<const uint8_t*>(data.data()), data.size());
 	md5.finalize();
 	return md5.hexdigest();
 }
-std::string Convert::CalcSHA256(const std::string& data)
-{
+std::string Convert::CalcSHA256(const std::string& data) {
 	SHA256 sha256;
 	sha256.update(reinterpret_cast<const uint8_t*>(data.data()), data.size());
 	sha256.finalize();
 	return sha256.hexdigest();
 }
-int Convert::ToInt32(const std::string input)
-{
+int Convert::ToInt32(const std::string input) {
 	return atoi(input.c_str());
 }
-long long Convert::ToInt64(const std::string input)
-{
+long long Convert::ToInt64(const std::string input) {
 	return _atoi64(input.c_str());
 }
-double Convert::ToFloat(const std::string input)
-{
+double Convert::ToFloat(const std::string input) {
 	return atof(input.c_str());
 }

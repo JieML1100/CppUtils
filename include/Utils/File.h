@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "defines.h"
+#include "FileInfo.h"
 #include <vector>
 #include <string>
-enum class FileAttributes
-{
+enum class FileAttributes {
     ReadOnly = 0x1,
     Hidden = 0x2,
     System = 0x4,
@@ -21,8 +21,7 @@ enum class FileAttributes
     IntegrityStream = 0x8000,
     NoScrubData = 0x20000
 };
-class File
-{
+class File {
 public:
 	static bool Exists(const std::string path);
 	static void Delete(const std::string path);
@@ -47,5 +46,13 @@ public:
     static FILETIME GetLastAccessTime(const std::string path);
     static void SetLastWriteTime(const std::string path, FILETIME time);
     static FILETIME GetLastWriteTime(const std::string path);
+};
+class Directory {
+public:
+    static void Create(std::string dirPath);
+    static bool Exists(std::string dirPath);
+    static void Delete(std::string dirPath, bool recursive = false);
+    static std::vector<FileInfo> GetFiles(std::string path);
+    static std::vector<DirectoryInfo> GetDirectories(std::string path);
 };
 

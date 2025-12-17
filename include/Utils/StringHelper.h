@@ -2,8 +2,7 @@
 #include "defines.h"
 #include <string>
 #include <vector>
-class StringHelper
-{
+class StringHelper {
 public:
 	static std::vector<std::string> Split(std::string str, std::string separator);
 	static std::vector<std::string> Split(std::string str, std::initializer_list<std::string> separators);

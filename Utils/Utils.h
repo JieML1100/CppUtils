@@ -18,7 +18,6 @@
 #include "FileInfo.h"
 #include "DateTime.h"
 #include "Registry.h"
-#include "Socket.h"
 #include "FileStream.h"
 #include "Dictionary.h"
 #include "HttpHelper.h"
@@ -29,6 +28,7 @@
 #include "DataPack.h"
 #include "Clipboard.h"
 #include "zlib/zlib.h"
+#include "Socket.h"
 
 #if defined(_MT) && !defined(_DLL)
 #ifndef _LIB
@@ -67,21 +67,16 @@ using json = JsonLib::json;
 #ifndef RELOC
 #define RELOC(p,o) (void*)((char*)p ? (((char*)p + o + 4) + (*(int*)((char*)p + o))) : NULL)
 #endif
-typedef struct _PATTERNVALUE
-{
-	union
-	{
-		struct
-		{
+typedef struct _PATTERNVALUE {
+	union {
+		struct {
 			uint8_t right : 4;
 			uint8_t left : 4;
 		};
 		uint8_t value;
 	};
-	union
-	{
-		struct
-		{
+	union {
+		struct {
 			uint8_t ignore_left : 4;
 			uint8_t ignore_right : 4;
 		};

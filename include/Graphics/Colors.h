@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <D2D1.h>
-namespace Colors
-{
+namespace Colors {
 	const D2D1_COLOR_F Opacity = { 0.f , 0.f , 0.f , 0.f };
 	const D2D1_COLOR_F Snow = { 1.f , 0.9804f , 0.9804f , 1.f };
 	const D2D1_COLOR_F GhostWhite = { 0.9725f , 0.9725f , 1.f , 1.f };
@@ -460,8 +459,7 @@ namespace Colors
 	const D2D1_COLOR_F LightGreen = { 0.5647f , 0.9333f , 0.5647f , 1.f };
 }
 
-namespace Win32Colors
-{
+namespace Win32Colors {
 	const DWORD Snow = RGB(255, 250, 250);
 	const DWORD PaleTurquoise1 = RGB(187, 255, 255);
 	const DWORD GhostWhite = RGB(248, 248, 255);

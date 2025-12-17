@@ -8,8 +8,7 @@
 
 HWND GetTopMostWindowInCurrentProcess();
 
-enum class DialogResult
-{
+enum class DialogResult {
     None,
     OK,
     Cancel,
@@ -20,8 +19,7 @@ enum class DialogResult
     No
 };
 
-class OpenFileDialog
-{
+class OpenFileDialog {
 public:
     std::vector<std::string> SelectedPaths;
     std::string InitialDirectory;
@@ -37,8 +35,7 @@ public:
     DialogResult ShowDialog(HWND owner);
 };
 
-class SaveFileDialog
-{
+class SaveFileDialog {
 public:
     std::string SelectedPath;
     std::string InitialDirectory;
@@ -53,8 +50,7 @@ public:
     DialogResult ShowDialog(HWND owner);
 };
 
-class FolderBrowserDialog
-{
+class FolderBrowserDialog {
 public:
     std::string SelectedPath;
     std::string Description;
@@ -65,8 +61,7 @@ public:
     DialogResult ShowDialog(HWND owner);
 };
 
-class ColorDialog
-{
+class ColorDialog {
 public:
     COLORREF Color;
 
@@ -74,8 +69,7 @@ public:
     DialogResult ShowDialog(HWND owner);
 };
 
-class FontDialog
-{
+class FontDialog {
 public:
     std::string FontName;
     int FontSize;
@@ -89,8 +83,7 @@ public:
     DialogResult ShowDialog(HWND owner);
 };
 
-class MessageBox
-{
+class MessageBox {
 public:
     static DialogResult Show(const std::string& text, const std::string& caption = "", UINT type = MB_OK);
     static DialogResult Show(const std::wstring& text, const std::wstring& caption = L"", UINT type = MB_OK);

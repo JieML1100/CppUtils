@@ -27,3 +27,11 @@ std::vector<uint8_t> Random::NextBytes(int count) {
     }
     return bytes;
 }
+
+void Random::NextBytes(void* buffer, int count) {
+    uint8_t* byteBuffer = static_cast<uint8_t*>(buffer);
+    std::uniform_int_distribution<> dist(0, 0xFF);
+    for (int i = 0; i < count; ++i) {
+        byteBuffer[i] = static_cast<uint8_t>(dist(gen));
+	}
+}

@@ -1,7 +1,6 @@
 ﻿#include "Dialog.h"
 
-HWND GetTopMostWindowInCurrentProcess() 
-{
+HWND GetTopMostWindowInCurrentProcess()  {
 	struct EnumParams {
 		DWORD processID;
 		HWND topMostWindow;
@@ -37,12 +36,10 @@ OpenFileDialog::OpenFileDialog()
       DereferenceLinks(true),
       ValidateNames(true),
       Filter("All Files\0*.*\0"),
-      Title("Open File")
-{
+      Title("Open File") {
 }
 
-DialogResult OpenFileDialog::ShowDialog(HWND owner)
-{
+DialogResult OpenFileDialog::ShowDialog(HWND owner) {
     Filter.append(2, '\0');
     OPENFILENAMEA ofn;
     CHAR szFile[1024] = { 0 };
@@ -59,54 +56,43 @@ DialogResult OpenFileDialog::ShowDialog(HWND owner)
     ofn.lpstrInitialDir = InitialDirectory.empty() ? NULL : InitialDirectory.c_str();
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-    if (Multiselect)
-    {
+    if (Multiselect) {
         ofn.Flags |= OFN_ALLOWMULTISELECT | OFN_EXPLORER;
     }
-    if (!DereferenceLinks)
-    {
+    if (!DereferenceLinks) {
         ofn.Flags |= OFN_NODEREFERENCELINKS;
     }
-    if (!ValidateNames)
-    {
+    if (!ValidateNames) {
         ofn.Flags |= OFN_NOVALIDATE;
     }
 
-    if (GetOpenFileNameA(&ofn) == TRUE)
-    {
+    if (GetOpenFileNameA(&ofn) == TRUE) {
         SelectedPaths.clear();
-        if (Multiselect)
-        {
+        if (Multiselect) {
             CHAR* p = ofn.lpstrFile;
             std::string directory = p;
             p += directory.size() + 1;
-            while (*p)
-            {
+            while (*p) {
                 std::string filename = p;
                 std::string fullpath = directory + "\\" + filename;
                 SelectedPaths.push_back(fullpath);
                 p += filename.size() + 1;
             }
-            if (SelectedPaths.empty())
-            {
+            if (SelectedPaths.empty()) {
                 SelectedPaths.push_back(directory);
             }
         }
-        else
-        {
+        else {
             SelectedPaths.push_back(ofn.lpstrFile);
         }
         return DialogResult::OK;
     }
-    else
-    {
+    else {
         DWORD err = CommDlgExtendedError();
-        if (err != 0)
-        {
+        if (err != 0) {
             return DialogResult::Abort;
         }
-        else
-        {
+        else {
             return DialogResult::Cancel;
         }
     }
@@ -118,12 +104,10 @@ SaveFileDialog::SaveFileDialog()
       DereferenceLinks(true),
       ValidateNames(true),
       Filter("All Files\0*.*\0"),
-      Title("Save File")
-{
+      Title("Save File") {
 }
 
-DialogResult SaveFileDialog::ShowDialog(HWND owner)
-{
+DialogResult SaveFileDialog::ShowDialog(HWND owner) {
     Filter.append(2, '\0');
     OPENFILENAMEA ofn;
     CHAR szFile[1024] = { 0 };
@@ -140,47 +124,39 @@ DialogResult SaveFileDialog::ShowDialog(HWND owner)
     ofn.lpstrInitialDir = InitialDirectory.empty() ? NULL : InitialDirectory.c_str();
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-    if (SupportMultiDottedExtensions)
-    {
+    if (SupportMultiDottedExtensions) {
         ofn.Flags |= OFN_EXPLORER | OFN_ENABLESIZING | OFN_ALLOWMULTISELECT | OFN_ENABLEHOOK;
     }
 
-    if (GetSaveFileNameA(&ofn) == TRUE)
-    {
+    if (GetSaveFileNameA(&ofn) == TRUE) {
         SelectedPath = ofn.lpstrFile;
         return DialogResult::OK;
     }
-    else
-    {
+    else {
         return DialogResult::Cancel;
     }
 }
 
 FolderBrowserDialog::FolderBrowserDialog()
     : ShowNewFolderButton(true),
-      Multiselect(false)
-{
+      Multiselect(false) {
 }
 
-DialogResult FolderBrowserDialog::ShowDialog(HWND owner)
-{
+DialogResult FolderBrowserDialog::ShowDialog(HWND owner) {
     BROWSEINFOA bi = { 0 };
     bi.hwndOwner = owner;
     bi.pidlRoot = NULL;
     bi.pszDisplayName = NULL;
     bi.lpszTitle = Description.c_str();
     bi.ulFlags = BIF_RETURNONLYFSDIRS;
-    if (ShowNewFolderButton)
-    {
+    if (ShowNewFolderButton) {
         bi.ulFlags |= BIF_NEWDIALOGSTYLE;
     }
     LPITEMIDLIST idl = SHBrowseForFolderA(&bi);
-    if (idl == NULL)
-    {
+    if (idl == NULL) {
         return DialogResult::Cancel;
     }
-    else
-    {
+    else {
         char path[MAX_PATH] = { 0 };
         SHGetPathFromIDListA(idl, path);
         SelectedPath = path;
@@ -189,12 +165,10 @@ DialogResult FolderBrowserDialog::ShowDialog(HWND owner)
 }
 
 ColorDialog::ColorDialog()
-    : Color(RGB(0, 0, 0))
-{
+    : Color(RGB(0, 0, 0)) {
 }
 
-DialogResult ColorDialog::ShowDialog(HWND owner)
-{
+DialogResult ColorDialog::ShowDialog(HWND owner) {
     CHOOSECOLORA cc = { 0 };
     static COLORREF acrCustClr[16];
     cc.lStructSize = sizeof(cc);
@@ -202,13 +176,11 @@ DialogResult ColorDialog::ShowDialog(HWND owner)
     cc.lpCustColors = (LPDWORD)acrCustClr;
     cc.rgbResult = Color;
     cc.Flags = CC_FULLOPEN | CC_RGBINIT;
-    if (ChooseColorA(&cc))
-    {
+    if (ChooseColorA(&cc)) {
         Color = cc.rgbResult;
         return DialogResult::OK;
     }
-    else
-    {
+    else {
         return DialogResult::Cancel;
     }
 }
@@ -219,8 +191,7 @@ FontDialog::FontDialog()
       Bold(false),
       Italic(false),
       Underline(false),
-      Strikeout(false)
-{
+      Strikeout(false) {
 }
 
 /**
@@ -233,8 +204,7 @@ FontDialog::FontDialog()
  *          用户选择的字体信息将被存储在 FontName、FontSize、Color 等成员变量中。
  *          函数还会根据用户选择的字体高度和屏幕 DPI 计算字体大小。
  */
-DialogResult FontDialog::ShowDialog(HWND owner)
-{
+DialogResult FontDialog::ShowDialog(HWND owner) {
 	CHOOSEFONTA cf = {0};
 	static LOGFONTA lf = { 0 };
     cf.lStructSize = sizeof(cf);
@@ -242,8 +212,7 @@ DialogResult FontDialog::ShowDialog(HWND owner)
     cf.lpLogFont = &lf;
     cf.rgbColors = Color;
     cf.Flags = CF_SCREENFONTS | CF_EFFECTS;
-    if (ChooseFontA(&cf))
-    {
+    if (ChooseFontA(&cf)) {
         int fontSizeInPixels = abs(lf.lfHeight);
         int dpi = GetDeviceCaps(GetDC(cf.hwndOwner), LOGPIXELSY);
         int fontSize = MulDiv(fontSizeInPixels, 72, dpi);
@@ -257,18 +226,15 @@ DialogResult FontDialog::ShowDialog(HWND owner)
         Strikeout = lf.lfStrikeOut;
         return DialogResult::OK;
     }
-    else
-    {
+    else {
         return DialogResult::Cancel;
     }
 }
 
-DialogResult MessageBox::Show(const std::string& text, const std::string& caption, UINT type)
-{
+DialogResult MessageBox::Show(const std::string& text, const std::string& caption, UINT type) {
     return (DialogResult)MessageBoxA(GetTopMostWindowInCurrentProcess(), text.c_str(), caption.c_str(), type);
 }
 
-DialogResult MessageBox::Show(const std::wstring& text, const std::wstring& caption, UINT type)
-{
+DialogResult MessageBox::Show(const std::wstring& text, const std::wstring& caption, UINT type) {
     return (DialogResult)MessageBoxW(GetTopMostWindowInCurrentProcess(), text.c_str(), caption.c_str(), type);
 }

@@ -2,8 +2,7 @@
 #include "defines.h"
 #include <string>
 #include <vector>
-class Clipboard
-{
+class Clipboard {
 public:
 	static std::string GetText();
 	static void SetText(std::string str);

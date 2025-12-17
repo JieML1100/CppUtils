@@ -1,8 +1,7 @@
 ﻿#pragma once
 #include "defines.h"
 #include <string>
-class Guid
-{
+class Guid {
 public:
 	GUID Data;
 	Guid();

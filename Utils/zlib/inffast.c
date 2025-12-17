@@ -1,15 +1,10 @@
-﻿
-
-#include "zutil.h"
+﻿#include "zutil.h"
 #include "inftrees.h"
 #include "inflate.h"
 #include "inffast.h"
-
 #ifdef ASMINF
 #  pragma message("Assembler code may have bugs -- use at your own risk")
 #else
-
-
 void ZLIB_INTERNAL inflate_fast(strm, start)
 z_streamp strm;
 unsigned start;         
@@ -35,12 +30,9 @@ unsigned start;
     unsigned dmask;             
     code here;                  
     unsigned op;                
-                                
     unsigned len;               
     unsigned dist;              
     unsigned char FAR *from;    
-
-    
     state = (struct inflate_state FAR *)strm->state;
     in = strm->next_in;
     last = in + (strm->avail_in - 5);
@@ -60,8 +52,6 @@ unsigned start;
     dcode = state->distcode;
     lmask = (1U << state->lenbits) - 1;
     dmask = (1U << state->distbits) - 1;
-
-    
     do {
         if (bits < 15) {
             hold += (unsigned long)(*in++) << bits;
@@ -250,14 +240,10 @@ unsigned start;
             break;
         }
     } while (in < last && out < end);
-
-    
     len = bits >> 3;
     in -= len;
     bits -= len << 3;
     hold &= (1U << bits) - 1;
-
-    
     strm->next_in = in;
     strm->next_out = out;
     strm->avail_in = (unsigned)(in < last ? 5 + (last - in) : 5 - (in - last));
@@ -267,7 +253,4 @@ unsigned start;
     state->bits = bits;
     return;
 }
-
-
-
 #endif 

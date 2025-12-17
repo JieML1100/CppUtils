@@ -4,9 +4,6 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{80bebbec-21ab-461d-8355-44e431fde244}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Media">
-      <UniqueIdentifier>{0aaefe5d-a426-4430-a80e-879b9bfa04e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils\sqlite">
       <UniqueIdentifier>{e6be0c01-ff26-4908-9309-d2cd0d887dc0}</UniqueIdentifier>
     </Filter>
@@ -227,7 +224,7 @@
     <ClCompile Include="Utils\HttpHelper.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\HttpHelper1.cpp">
+    <ClCompile Include="Utils\HttpHelperExp.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\MD5.cpp">
@@ -258,9 +255,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\StringHelper.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Thread.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\TimeSpan.cpp">

@@ -1,14 +1,12 @@
 ﻿#pragma once
 template<typename... Types>
-class Tuple
-{
+class Tuple {
 public:
     Tuple() {};
 };
 template<
     typename T1>
-class Tuple<T1>
-{
+class Tuple<T1> {
 public:
     T1 Item1;
     Tuple() {};
@@ -17,8 +15,7 @@ public:
 };
 template<
     typename T1, typename T2>
-class Tuple<T1, T2>
-{
+class Tuple<T1, T2> {
 public:
     T1 Item1; T2 Item2;
     Tuple() {};
@@ -27,8 +24,7 @@ public:
 };
 template<
     typename T1, typename T2, typename T3>
-class Tuple<T1, T2, T3>
-{
+class Tuple<T1, T2, T3> {
 public:
     T1 Item1; T2 Item2; T3 Item3;
     Tuple() {};
@@ -37,8 +33,7 @@ public:
 };
 template<
     typename T1, typename T2, typename T3, typename T4>
-class Tuple<T1, T2, T3, T4>
-{
+class Tuple<T1, T2, T3, T4> {
 public:
     T1 Item1; T2 Item2; T3 Item3; T4 Item4;
     Tuple() {};
@@ -47,8 +42,7 @@ public:
 };
 template<
     typename T1, typename T2, typename T3, typename T4, typename T5>
-class Tuple<T1, T2, T3, T4, T5>
-{
+class Tuple<T1, T2, T3, T4, T5> {
 public:
     T1 Item1; T2 Item2; T3 Item3; T4 Item4; T5 Item5;
     Tuple() {};
@@ -57,8 +51,7 @@ public:
 };
 template<
     typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-class Tuple<T1, T2, T3, T4, T5, T6>
-{
+class Tuple<T1, T2, T3, T4, T5, T6> {
 public:
     T1 Item1; T2 Item2; T3 Item3; T4 Item4; T5 Item5; T6 Item6;
     Tuple() {};
@@ -67,8 +60,7 @@ public:
 };
 template<
     typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-class Tuple<T1, T2, T3, T4, T5, T6, T7>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7> {
 public:
     T1 Item1; T2 Item2; T3 Item3; T4 Item4; T5 Item5; T6 Item6; T7 Item7;
     Tuple() {};
@@ -77,8 +69,7 @@ public:
 };
 template<
     typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     Tuple() {};
@@ -88,8 +79,7 @@ public:
 template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;
@@ -101,8 +91,7 @@ public:
 template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9, typename T10>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10;
@@ -114,8 +103,7 @@ public:
 template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9, typename T10, typename T11>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11;
@@ -127,8 +115,7 @@ public:
 template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9, typename T10, typename T11, typename T12>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12;
@@ -140,8 +127,7 @@ public:
 template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9, typename T10, typename T11, typename T12, typename T13>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13;
@@ -153,8 +139,7 @@ public:
 template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9, typename T10, typename T11, typename T12, typename T13, typename T14>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14;
@@ -166,8 +151,7 @@ public:
 template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9, typename T10, typename T11, typename T12, typename T13, typename T14, typename T15>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15;
@@ -179,8 +163,7 @@ public:
 template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9, typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -194,8 +177,7 @@ template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
     typename T17>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -212,8 +194,7 @@ template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
     typename T17, typename T18>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -230,8 +211,7 @@ template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
     typename T17, typename T18, typename T19>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -248,8 +228,7 @@ template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
     typename T17, typename T18, typename T19, typename T20>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -266,8 +245,7 @@ template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
     typename T17, typename T18, typename T19, typename T20, typename T21>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -284,8 +262,7 @@ template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
     typename T17, typename T18, typename T19, typename T20, typename T21, typename T22>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -302,8 +279,7 @@ template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
     typename T17, typename T18, typename T19, typename T20, typename T21, typename T22, typename T23>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -320,8 +296,7 @@ template<
     typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
     typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
     typename T17, typename T18, typename T19, typename T20, typename T21, typename T22, typename T23, typename T24>
-class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24>
-{
+class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -341,8 +316,7 @@ template<
     typename T25>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25>
-{
+    T25> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -364,8 +338,7 @@ template<
     typename T25, typename T26>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26>
-{
+    T25, T26> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -387,8 +360,7 @@ template<
     typename T25, typename T26, typename T27>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27>
-{
+    T25, T26, T27> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -410,8 +382,7 @@ template<
     typename T25, typename T26, typename T27, typename T28>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28>
-{
+    T25, T26, T27, T28> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -433,8 +404,7 @@ template<
     typename T25, typename T26, typename T27, typename T28, typename T29>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29>
-{
+    T25, T26, T27, T28, T29> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -456,8 +426,7 @@ template<
     typename T25, typename T26, typename T27, typename T28, typename T29, typename T30>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30>
-{
+    T25, T26, T27, T28, T29, T30> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -479,8 +448,7 @@ template<
     typename T25, typename T26, typename T27, typename T28, typename T29, typename T30, typename T31>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31>
-{
+    T25, T26, T27, T28, T29, T30, T31> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -502,8 +470,7 @@ template<
     typename T25, typename T26, typename T27, typename T28, typename T29, typename T30, typename T31, typename T32>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -526,8 +493,7 @@ template<
     typename T33>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -553,8 +519,7 @@ template<
     typename T33, typename T34>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -580,8 +545,7 @@ template<
     typename T33, typename T34, typename T35>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -607,8 +571,7 @@ template<
     typename T33, typename T34, typename T35, typename T36>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -634,8 +597,7 @@ template<
     typename T33, typename T34, typename T35, typename T36, typename T37>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -661,8 +623,7 @@ template<
     typename T33, typename T34, typename T35, typename T36, typename T37, typename T38>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -688,8 +649,7 @@ template<
     typename T33, typename T34, typename T35, typename T36, typename T37, typename T38, typename T39>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -715,8 +675,7 @@ template<
     typename T33, typename T34, typename T35, typename T36, typename T37, typename T38, typename T39, typename T40>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -743,8 +702,7 @@ template<
     typename T41>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -773,8 +731,7 @@ template<
     typename T41, typename T42>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -803,8 +760,7 @@ template<
     typename T41, typename T42, typename T43>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -833,8 +789,7 @@ template<
     typename T41, typename T42, typename T43, typename T44>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -863,8 +818,7 @@ template<
     typename T41, typename T42, typename T43, typename T44, typename T45>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -893,8 +847,7 @@ template<
     typename T41, typename T42, typename T43, typename T44, typename T45, typename T46>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -923,8 +876,7 @@ template<
     typename T41, typename T42, typename T43, typename T44, typename T45, typename T46, typename T47>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -953,8 +905,7 @@ template<
     typename T41, typename T42, typename T43, typename T44, typename T45, typename T46, typename T47, typename T48>
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
-    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48>
-{
+    T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -985,8 +936,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49>
-{
+    T49> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1020,8 +970,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50>
-{
+    T49, T50> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1055,8 +1004,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51>
-{
+    T49, T50, T51> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1090,8 +1038,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52>
-{
+    T49, T50, T51, T52> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1125,8 +1072,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53>
-{
+    T49, T50, T51, T52, T53> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1160,8 +1106,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54>
-{
+    T49, T50, T51, T52, T53, T54> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1195,8 +1140,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55>
-{
+    T49, T50, T51, T52, T53, T54, T55> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1230,8 +1174,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1266,8 +1209,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56, T57>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56, T57> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1304,8 +1246,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1342,8 +1283,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1380,8 +1320,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1418,8 +1357,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1456,8 +1394,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61, T62>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61, T62> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1494,8 +1431,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61, T62, T63>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61, T62, T63> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;
@@ -1532,8 +1468,7 @@ template<
 class Tuple<
     T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24,
     T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48,
-    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61, T62, T63, T64>
-{
+    T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61, T62, T63, T64> {
 public:
     T1  Item1;  T2  Item2;  T3  Item3;  T4  Item4;  T5  Item5;  T6  Item6;  T7  Item7;  T8  Item8;
     T9  Item9;  T10 Item10; T11 Item11; T12 Item12; T13 Item13; T14 Item14; T15 Item15; T16 Item16;

@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "defines.h"
-class TimeSpan
-{
+class TimeSpan {
     static const __int64 TicksPerMillisecond = 10000;
     static const __int64 TicksPerSecond = TicksPerMillisecond * 1000;
     static const __int64 TicksPerMinute = TicksPerSecond * 60;
