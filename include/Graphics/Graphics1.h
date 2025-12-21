@@ -5,9 +5,11 @@
 #ifndef _WINSOCKAPI_
 #define _WINSOCKAPI_
 #endif
+
 #include <d2d1.h>
 #include <d2d1_1.h>
 #include <dxgi.h>
+#include <dxgi1_2.h>
 #include <dxgiformat.h>
 #include <memory>
 #include <optional>
@@ -19,44 +21,43 @@
 #include "Factory.h"
 #include "BitmapSource.h"
 
-#pragma comment(lib,"d2d1.lib")
-
 #ifndef _LIB
-    #if defined(_MT)
-        // MT (静态运行时库)
-        #if !defined(_DLL)
-            #if defined(_M_X64) && defined(_DEBUG)
-                #pragma comment(lib, "Graphics_x64_MTd.lib")
-            #elif defined(_M_X64) && !defined(_DEBUG)
-                #pragma comment(lib, "Graphics_x64_MT.lib")
-            #elif defined(_M_IX86) && defined(_DEBUG)
-                #pragma comment(lib, "Graphics_x86_MTd.lib")
-            #elif defined(_M_IX86) && !defined(_DEBUG)
-                #pragma comment(lib, "Graphics_x86_MT.lib")
-            #else
-                #error "Unsupported architecture or configuration"
-            #endif
-        // MD (动态运行时库)
-        #else
-            #if defined(_M_X64) && defined(_DEBUG)
-                #pragma comment(lib, "Graphics_x64_MDd.lib")
-            #elif defined(_M_X64) && !defined(_DEBUG)
-                #pragma comment(lib, "Graphics_x64_MD.lib")
-            #elif defined(_M_IX86) && defined(_DEBUG)
-                #pragma comment(lib, "Graphics_x86_MDd.lib")
-            #elif defined(_M_IX86) && !defined(_DEBUG)
-                #pragma comment(lib, "Graphics_x86_MD.lib")
-            #else
-                #error "Unsupported architecture or configuration"
-            #endif
-        #endif
-    #else
-        #pragma message("Graphics: automatic runtime library linking skipped because _MT is not defined.")
-    #endif
+#if defined(_MT)
+// MT (静态运行时库)
+#if !defined(_DLL)
+#if defined(_M_X64) && defined(_DEBUG)
+#pragma comment(lib, "Graphics_x64_MTd.lib")
+#elif defined(_M_X64) && !defined(_DEBUG)
+#pragma comment(lib, "Graphics_x64_MT.lib")
+#elif defined(_M_IX86) && defined(_DEBUG)
+#pragma comment(lib, "Graphics_x86_MTd.lib")
+#elif defined(_M_IX86) && !defined(_DEBUG)
+#pragma comment(lib, "Graphics_x86_MT.lib")
+#else
+#error "Unsupported architecture or configuration"
+#endif
+// MD (动态运行时库)
+#else
+#if defined(_M_X64) && defined(_DEBUG)
+#pragma comment(lib, "Graphics_x64_MDd.lib")
+#elif defined(_M_X64) && !defined(_DEBUG)
+#pragma comment(lib, "Graphics_x64_MD.lib")
+#elif defined(_M_IX86) && defined(_DEBUG)
+#pragma comment(lib, "Graphics_x86_MDd.lib")
+#elif defined(_M_IX86) && !defined(_DEBUG)
+#pragma comment(lib, "Graphics_x86_MD.lib")
+#else
+#error "Unsupported architecture or configuration"
+#endif
+#endif
+#else
+#pragma message("Graphics: automatic runtime library linking skipped because _MT is not defined.")
+#endif
 #endif
 
 EXTERN_C Font* DefaultFontObject;
-class D2DGraphics {
+
+class D2DGraphics1 {
 public:
 	enum class SurfaceKind {
 		None,
@@ -79,16 +80,18 @@ public:
 		D2D1_ALPHA_MODE alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
 	};
 
-	D2DGraphics();
-	explicit D2DGraphics(IWICBitmap* bitmap, bool takeOwnership = false);
-	explicit D2DGraphics(const BitmapSource* bitmap);
-	explicit D2DGraphics(IDXGISwapChain* swapChain);
-	explicit D2DGraphics(const InitOptions& options);
-	virtual ~D2DGraphics();
+	D2DGraphics1();
+	explicit D2DGraphics1(IWICBitmap* bitmap, bool takeOwnership = false);
+	explicit D2DGraphics1(const BitmapSource* bitmap);
+	explicit D2DGraphics1(IDXGISwapChain* swapChain);
+	explicit D2DGraphics1(const InitOptions& options);
+	virtual ~D2DGraphics1();
 
 	virtual void BeginRender();
 	virtual void EndRender();
 	virtual void ReSize(UINT width, UINT height);
+
+	HRESULT EnsureDeviceContext();
 
 	void Clear(D2D1_COLOR_F color);
 
@@ -201,6 +204,13 @@ public:
 
 	ID2D1RenderTarget* GetRenderTargetRaw() const;
 	Microsoft::WRL::ComPtr<ID2D1RenderTarget> GetRenderTarget() const;
+
+	ID2D1DeviceContext* GetDeviceContextRaw() const;
+	Microsoft::WRL::ComPtr<ID2D1DeviceContext> GetDeviceContext() const;
+
+	ID2D1Bitmap1* CreateBitmapFromDxgiSurface(IDXGISurface* surface);
+	void DrawDxgiSurface(IDXGISurface* surface, float x, float y, float width, float height, float opacity = 1.0f);
+
 	IWICBitmap* GetTargetWicBitmap() const;
 
 	ID2D1Bitmap* CreateBitmap(IWICBitmap* wb);
@@ -215,9 +225,6 @@ public:
 	void SetTransform(D2D1_MATRIX_3X2_F matrix);
 	void ClearTransform();
 
-	static HBITMAP CopyFromScreen(int x, int y, int width, int height);
-	static HBITMAP CopyFromWidnow(HWND handle, int x, int y, int width, int height);
-	static SIZE GetScreenSize(int index = 0);
 	static D2D1_SIZE_F GetTextLayoutSize(IDWriteTextLayout* textLayout);
 
 protected:
@@ -225,45 +232,70 @@ protected:
 	HRESULT InitializeWithSize(UINT width, UINT height, FLOAT dpiX, FLOAT dpiY, DXGI_FORMAT format, D2D1_ALPHA_MODE alphaMode);
 	HRESULT InitializeWithWicBitmap(IWICBitmap* bitmap, bool takeOwnership, FLOAT dpiX, FLOAT dpiY, DXGI_FORMAT format, D2D1_ALPHA_MODE alphaMode);
 	HRESULT InitializeWithSwapChain(IDXGISwapChain* swapChain);
-	HRESULT CreateRenderTargetFromBitmap(IWICBitmap* bitmap, FLOAT dpiX, FLOAT dpiY, DXGI_FORMAT format, D2D1_ALPHA_MODE alphaMode);
+
 	void ResetTarget();
 	HRESULT ConfigDefaultObjects();
+	HRESULT EnsureDeviceResources();
+	HRESULT CreateTargetBitmapForSize(UINT width, UINT height, FLOAT dpiX, FLOAT dpiY, DXGI_FORMAT format, D2D1_ALPHA_MODE alphaMode);
+	HRESULT CreateTargetBitmapForSwapChain(IDXGISwapChain* swapChain);
+	HRESULT SyncTargetToWicIfNeeded();
 
 protected:
-	Microsoft::WRL::ComPtr<ID2D1RenderTarget> pRenderTarget;
+	Microsoft::WRL::ComPtr<ID2D1Device> pD2DDevice;
+	Microsoft::WRL::ComPtr<ID2D1DeviceContext> pDeviceContext;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap1> pTargetBitmap;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
+
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> Default_Brush;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> Default_Brush_Back;
 	Microsoft::WRL::ComPtr<IWICBitmap> pWicTargetBitmap;
+
 	SurfaceKind surfaceKind = SurfaceKind::None;
+	bool wicDirty = false;
 };
 
-class CompatibleGraphics : public D2DGraphics {
+class CompatibleGraphics1 : public D2DGraphics1 {
 public:
-	CompatibleGraphics(D2DGraphics* parent, D2D1_SIZE_F desiredSize);
+	CompatibleGraphics1(D2DGraphics1* parent, D2D1_SIZE_F desiredSize);
 
 	void ReSize(UINT width, UINT height) override;
 	ID2D1Bitmap* GetBitmap() const;
-	ID2D1BitmapRenderTarget* GetBitmapRenderTarget() const;
 
 private:
-	HRESULT Initialize(D2DGraphics* parent, D2D1_SIZE_F desiredSize);
+	HRESULT Initialize(D2DGraphics1* parent, D2D1_SIZE_F desiredSize);
 	HRESULT RecreateTarget();
-	void ResetCompatibleTarget();
 
 private:
-	Microsoft::WRL::ComPtr<ID2D1RenderTarget> parentRenderTarget;
-	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> compatibleTarget;
+	Microsoft::WRL::ComPtr<ID2D1Device> parentDevice;
 	D2D1_SIZE_F desiredSize;
 };
 
-class HwndGraphics : public D2DGraphics {
+class HwndGraphics1 : public D2DGraphics1 {
 private:
-	HWND hwnd;
-	Microsoft::WRL::ComPtr<ID2D1HwndRenderTarget> pHwndRenderTarget;
+	HWND hwnd = nullptr;
 	HRESULT InitDevice();
 public:
-	HwndGraphics(HWND hWnd);
+	HwndGraphics1(HWND hWnd);
 	void ReSize(UINT width, UINT height) override;
 	void BeginRender() override;
 	void EndRender() override;
 };
+
+class CompositionSwapChainGraphics1 : public D2DGraphics1 {
+public:
+	explicit CompositionSwapChainGraphics1(IDXGISwapChain1* swapChain);
+	void ReSize(UINT width, UINT height) override;
+	void BeginRender() override;
+	void EndRender() override;
+
+private:
+	Microsoft::WRL::ComPtr<IDXGISwapChain1> swapChain1;
+};
+
+struct ID3D11Device;
+struct IDXGIDevice;
+HRESULT Graphics1_EnsureSharedD3DDevice();
+ID3D11Device* Graphics1_GetSharedD3DDevice();
+IDXGIDevice* Graphics1_GetSharedDXGIDevice();
+
+

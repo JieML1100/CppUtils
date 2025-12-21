@@ -15,9 +15,9 @@
 #  define adler32_combine64     z_adler32_combine64
 #  define adler32_z             z_adler32_z
 #  ifndef Z_SOLO
-#    define compress              z_compress
-#    define compress2             z_compress2
-#    define compressBound         z_compressBound
+#  define compress              z_compress
+#  define compress2             z_compress2
+#  define compressBound         z_compressBound
 #  endif
 #  define crc32                 z_crc32
 #  define crc32_combine         z_crc32_combine

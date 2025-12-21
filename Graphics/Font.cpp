@@ -7,7 +7,7 @@
 #pragma warning(disable: 4018)
 
 Font::Font(IDWriteTextFormat* fontObject, float _fontsize) :_fontSize(_fontsize), _fontName(L""), _fontObject(fontObject) {
-	this->FontHeight = this->GetTextSize(L'I').height;
+	this->FontHeight = this->GetTextSize(L"I", FLT_MAX, FLT_MAX).height;
 }
 Font::Font(std::wstring fontFamilyName, float _fontsize) {
 	this->_fontSize = _fontsize;
@@ -21,7 +21,7 @@ Font::Font(std::wstring fontFamilyName, float _fontsize) {
 		this->_fontSize,
 		L"",
 		&_fontObject);
-	this->FontHeight = this->GetTextSize(L'I').height;
+	this->FontHeight = this->GetTextSize(L"I", FLT_MAX, FLT_MAX).height;
 }
 Font::~Font() {
 	if (this->_fontObject) this->_fontObject->Release();
@@ -42,12 +42,12 @@ SET_CPP(Font, float, FontSize) {
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
 			DWRITE_FONT_STRETCH_NORMAL,
-			this->FontSize,
+			value,
 			L"",
 			&_fontObject);
 	}
 	this->_fontSize = value;
-	this->FontHeight = this->GetTextSize(L'I').height;
+	this->FontHeight = this->GetTextSize(L"I", FLT_MAX, FLT_MAX).height;
 }
 GET_CPP(Font, std::wstring, FontName) {
 	return this->_fontName;
@@ -57,7 +57,7 @@ SET_CPP(Font, std::wstring, FontName) {
 		this->_fontObject->Release();
 		this->_fontObject = NULL;
 		_DWriteFactory->CreateTextFormat(
-			this->_fontName.c_str(),
+			value.c_str(),
 			NULL,
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
@@ -67,7 +67,7 @@ SET_CPP(Font, std::wstring, FontName) {
 			&_fontObject);
 	}
 	this->_fontName = value;
-	this->FontHeight = this->GetTextSize(L'I').height;
+	this->FontHeight = this->GetTextSize(L"I", FLT_MAX, FLT_MAX).height;
 }
 D2D1_SIZE_F Font::GetTextSize(std::wstring str, float w, float h) {
 	D2D1_SIZE_F minSize = { 0,0 };

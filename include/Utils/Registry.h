@@ -21,16 +21,16 @@ public:
 	std::vector<std::string> GetValueNames();
 	void Close();
 };
-static class Registry {
+class Registry {
 public:
-	static RegistryKey ClassesRoot;
-	static RegistryKey CurrentConfig;
-	static RegistryKey CurrentUser;
-	static RegistryKey LocalMachine;
-	static RegistryKey Users;
 	static RegistryKey OpenBaseKey(HKEY hKey, const std::string& subKey);
 	static RegistryKey OpenBaseKey(HKEY hKey, const std::string& subKey, bool writable);
 	static RegistryKey OpenRemoteBaseKey(HKEY hKey, const std::string& machineName, const std::string& subKey);
 	static RegistryKey OpenRemoteBaseKey(HKEY hKey, const std::string& machineName, const std::string& subKey, bool writable);
 };
 
+static RegistryKey ClassesRoot = RegistryKey(HKEY_CLASSES_ROOT);
+static RegistryKey CurrentConfig = RegistryKey(HKEY_CURRENT_CONFIG);
+static RegistryKey CurrentUser = RegistryKey(HKEY_CURRENT_USER);
+static RegistryKey LocalMachine = RegistryKey(HKEY_LOCAL_MACHINE);
+static RegistryKey Users = RegistryKey(HKEY_USERS);

@@ -1,4 +1,6 @@
 ﻿#include "Guid.h"
+#include <objbase.h>
+#include <rpc.h>
 #pragma comment(lib, "Rpcrt4.lib")
 Guid::Guid() {
 	Data = { 0 };

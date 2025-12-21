@@ -214,7 +214,7 @@ public:
 	using function_type = typename std::remove_pointer<Func>::type;
 	using std_function_type = std::function<function_type>;
 
-	std::vector<std_function_type> _events;
+	std::vector<std_function_type> _events = std::vector<std_function_type>();
 
 	Event() = default;
 	~Event() = default;

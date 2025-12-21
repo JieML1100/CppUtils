@@ -112,11 +112,6 @@ void RegistryKey::Close() {
 	RegCloseKey(hKey);
 }
 
-RegistryKey Registry::ClassesRoot = RegistryKey(HKEY_CLASSES_ROOT);
-RegistryKey Registry::CurrentConfig = RegistryKey(HKEY_CURRENT_CONFIG);
-RegistryKey Registry::CurrentUser = RegistryKey(HKEY_CURRENT_USER);
-RegistryKey Registry::LocalMachine = RegistryKey(HKEY_LOCAL_MACHINE);
-RegistryKey Registry::Users = RegistryKey(HKEY_USERS);
 RegistryKey Registry::OpenBaseKey(HKEY hKey, const std::string& subKey) {
 	return OpenBaseKey(hKey, subKey, false);
 }

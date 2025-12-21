@@ -1,7 +1,13 @@
 ﻿#pragma once
-#include <Windows.h>
+#include <cstdint>
+#include <functional>
+#include <string>
+#include <type_traits>
+#include <vector>
+
+#include "List.h"
+#include "Tuple.h"
 #include "sqlite/sqlite3.h"
-#include "Utils.h"
 
 
 

@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include "defines.h"
-#include <Psapi.h>
 #include <string>
 #include <vector>
+#include "defines.h"
+#include <Psapi.h>
 class ProcessOperator {
 public:
 	HANDLE Handle = NULL;

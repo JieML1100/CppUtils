@@ -1,5 +1,4 @@
 #pragma once
-#include <Windows.h>
 #include "PML/PML.h"
 #define ClearFlag(cr3) ((ULONG64)cr3 & 0x000FFFFFFFFFF000)
 #define NUM_1G			0x40000000

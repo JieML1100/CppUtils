@@ -1,4 +1,10 @@
-﻿#pragma once
+#pragma once
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
 #include <d2d1.h>
 #include <d2d1_1.h>
 #include <dxgi.h>
@@ -145,7 +151,7 @@ public:
 
 	void FillMesh(ID2D1Mesh* mesh, D2D1_COLOR_F color);
 
-	IDWriteTextLayout* CreateStringLayout(std::wstring str, float width, float height, Font* font = nullptr);
+	IDWriteTextLayout* CreateStringLayout(const std::wstring& str, float width, float height, Font* font = nullptr);
 
 	void DrawStringLayout(IDWriteTextLayout* layout, float x, float y, D2D1_COLOR_F color);
 	void DrawStringLayout(IDWriteTextLayout* layout, float x, float y, ID2D1Brush* brush);
@@ -159,22 +165,22 @@ public:
 	void DrawStringLayoutCenteredOutlined(IDWriteTextLayout* layout, float centerX, float centerY, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor);
 	void DrawStringLayoutCenteredOutlined(IDWriteTextLayout* layout, float centerX, float centerY, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor);
 
-	void DrawStringLayoutEffect(IDWriteTextLayout* layout, float x, float y, D2D1_COLOR_F color, DWRITE_TEXT_RANGE subRange, D2D1_COLOR_F fontBack, Font* font = NULL);
-	void DrawStringLayoutEffect(IDWriteTextLayout* layout, float x, float y, ID2D1Brush* brush, DWRITE_TEXT_RANGE subRange, D2D1_COLOR_F fontBack, Font* font = NULL);
+	void DrawStringLayoutEffect(IDWriteTextLayout* layout, float x, float y, D2D1_COLOR_F color, DWRITE_TEXT_RANGE subRange, D2D1_COLOR_F fontBack, Font* font = nullptr);
+	void DrawStringLayoutEffect(IDWriteTextLayout* layout, float x, float y, ID2D1Brush* brush, DWRITE_TEXT_RANGE subRange, D2D1_COLOR_F fontBack, Font* font = nullptr);
 
-	void DrawString(std::wstring str, float x, float y, D2D1_COLOR_F color, Font* font = nullptr);
-	void DrawString(std::wstring str, float x, float y, ID2D1Brush* brush, Font* font = nullptr);
-	void DrawString(std::wstring str, float x, float y, float w, float h, D2D1_COLOR_F color, Font* font = nullptr);
-	void DrawString(std::wstring str, float x, float y, float w, float h, ID2D1Brush* brush, Font* font = nullptr);
+	void DrawString(const std::wstring& str, float x, float y, D2D1_COLOR_F color, Font* font = nullptr);
+	void DrawString(const std::wstring& str, float x, float y, ID2D1Brush* brush, Font* font = nullptr);
+	void DrawString(const std::wstring& str, float x, float y, float w, float h, D2D1_COLOR_F color, Font* font = nullptr);
+	void DrawString(const std::wstring& str, float x, float y, float w, float h, ID2D1Brush* brush, Font* font = nullptr);
 
-	void DrawStringCentered(std::wstring str, float centerX, float centerY, D2D1_COLOR_F color, Font* font = nullptr);
-	void DrawStringCentered(std::wstring str, float centerX, float centerY, ID2D1Brush* brush, Font* font = nullptr);
+	void DrawStringCentered(const std::wstring& str, float centerX, float centerY, D2D1_COLOR_F color, Font* font = nullptr);
+	void DrawStringCentered(const std::wstring& str, float centerX, float centerY, ID2D1Brush* brush, Font* font = nullptr);
 
-	void DrawStringOutlined(std::wstring str, float x, float y, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font = nullptr);
-	void DrawStringOutlined(std::wstring str, float x, float y, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font = nullptr);
+	void DrawStringOutlined(const std::wstring& str, float x, float y, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font = nullptr);
+	void DrawStringOutlined(const std::wstring& str, float x, float y, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font = nullptr);
 
-	void DrawStringCenteredOutlined(std::wstring str, float centerX, float centerY, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font = nullptr);
-	void DrawStringCenteredOutlined(std::wstring str, float centerX, float centerY, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font = nullptr);
+	void DrawStringCenteredOutlined(const std::wstring& str, float centerX, float centerY, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font = nullptr);
+	void DrawStringCenteredOutlined(const std::wstring& str, float centerX, float centerY, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font = nullptr);
 
 	void DrawTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color, float width = 1.0f);
 	void FillTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color);
@@ -203,7 +209,7 @@ public:
 
 	ID2D1LinearGradientBrush* CreateLinearGradientBrush(D2D1_GRADIENT_STOP* stops, unsigned int stopcount);
 	ID2D1RadialGradientBrush* CreateRadialGradientBrush(D2D1_GRADIENT_STOP* stops, unsigned int stopcount, D2D1_POINT_2F center);
-	ID2D1BitmapBrush* CreateitmapBrush(ID2D1Bitmap* bmp);
+	ID2D1BitmapBrush* CreateBitmapBrush(ID2D1Bitmap* bmp);
 	ID2D1SolidColorBrush* CreateSolidColorBrush(D2D1_COLOR_F color);
 	D2D1_SIZE_F Size();
 	void SetTransform(D2D1_MATRIX_3X2_F matrix);

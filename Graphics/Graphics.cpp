@@ -1,13 +1,25 @@
-﻿#include "Graphics.h"
+#include "Graphics.h"
 
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 
 #include <d2derr.h>
 
 using Microsoft::WRL::ComPtr;
+
 constexpr float INV_255 = 1.0f / 255.0f;
-static Font* DefaultFontObject = new Font(L"Arial", 18.0f);
+constexpr float DEG_TO_RAD = M_PI / 180.0f;
+constexpr float OUTLINE_OFFSET = 1.0f;
+
+namespace {
+	Font* GetDefaultFont() {
+		static Font* defaultFont = new Font(L"Arial", 18.0f);
+		return defaultFont;
+	}
+}
+
+Font* DefaultFontObject = GetDefaultFont();
 D2DGraphics::D2DGraphics() = default;
 
 D2DGraphics::D2DGraphics(IWICBitmap* bitmap, bool takeOwnership) {
@@ -180,19 +192,16 @@ HRESULT D2DGraphics::InitializeWithSwapChain(IDXGISwapChain* swapChain) {
 
 	ResetTarget();
 
-	// 从SwapChain获取DXGI Surface
 	ComPtr<IDXGISurface> dxgiSurface;
 	HRESULT hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&dxgiSurface));
 	if (FAILED(hr)) {
 		return hr;
 	}
 
-	// 创建渲染目标属性
 	D2D1_RENDER_TARGET_PROPERTIES properties = D2D1::RenderTargetProperties(
 		D2D1_RENDER_TARGET_TYPE_DEFAULT,
 		D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED));
 
-	// 创建DXGI Surface渲染目标
 	ComPtr<ID2D1RenderTarget> target;
 	hr = _D2DFactory->CreateDxgiSurfaceRenderTarget(dxgiSurface.Get(), &properties, &target);
 	if (FAILED(hr)) {
@@ -237,6 +246,7 @@ ID2D1SolidColorBrush* D2DGraphics::GetColorBrush(D2D1_COLOR_F newcolor) {
 	if (!Default_Brush) {
 		return nullptr;
 	}
+	//*(D2D1_COLOR_F*)((char*)Default_Brush.Get() + 0x38) = *(D2D1_COLOR_F*)&newcolor;
 	Default_Brush->SetColor(newcolor);
 	return Default_Brush.Get();
 }
@@ -258,6 +268,7 @@ ID2D1SolidColorBrush* D2DGraphics::GetBackColorBrush(D2D1_COLOR_F newcolor) {
 	if (!Default_Brush_Back) {
 		return nullptr;
 	}
+	//*(D2D1_COLOR_F*)((char*)Default_Brush_Back.Get() + 0x38) = *(D2D1_COLOR_F*)&newcolor;
 	Default_Brush_Back->SetColor(newcolor);
 	return Default_Brush_Back.Get();
 }
@@ -266,7 +277,7 @@ ID2D1SolidColorBrush* D2DGraphics::GetBackColorBrush(COLORREF newcolor) {
 	return GetBackColorBrush(_newcolor);
 }
 ID2D1SolidColorBrush* D2DGraphics::GetBackColorBrush(int r, int g, int b) {
-	D2D1_COLOR_F _newcolor = { r * INV_255,g * INV_255,b * INV_255,1.0f };
+	D2D1_COLOR_F _newcolor = { r * INV_255,g * INV_255,b * INV_255, 1.0f };
 	return GetBackColorBrush(_newcolor);
 }
 ID2D1SolidColorBrush* D2DGraphics::GetBackColorBrush(float r, float g, float b, float a) {
@@ -466,66 +477,57 @@ void D2DGraphics::FillGeometry(ID2D1Geometry* geo, ID2D1Brush* brush) {
 	}
 	ctx->FillGeometry(geo, brush);
 }
+namespace {
+	// 辅助函数：创建饼图几何形状
+	ComPtr<ID2D1PathGeometry> CreatePieGeometry(D2D1_POINT_2F center, float width, float height,
+		float startAngle, float sweepAngle) {
+		ComPtr<ID2D1PathGeometry> geo;
+		geo.Attach(Factory::CreateGeomtry());
+		if (!geo) return nullptr;
+
+		ComPtr<ID2D1GeometrySink> sink;
+		if (FAILED(geo->Open(&sink))) return nullptr;
+
+		sink->BeginFigure(center, D2D1_FIGURE_BEGIN_FILLED);
+		float startRad = startAngle * DEG_TO_RAD;
+		float endRad = (startAngle + sweepAngle) * DEG_TO_RAD;
+		D2D1_POINT_2F startPoint{ center.x + (width * 0.5f) * cosf(startRad), center.y - (height * 0.5f) * sinf(startRad) };
+		D2D1_POINT_2F endPoint{ center.x + (width * 0.5f) * cosf(endRad), center.y - (height * 0.5f) * sinf(endRad) };
+		sink->AddLine(startPoint);
+		D2D1_SIZE_F arcSize{ width * 0.5f, height * 0.5f };
+		D2D1_ARC_SIZE arcSizeFlag = (std::fabs(sweepAngle) <= 180.0f) ? D2D1_ARC_SIZE_SMALL : D2D1_ARC_SIZE_LARGE;
+		D2D1_SWEEP_DIRECTION sweepDir = sweepAngle >= 0.0f ? D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
+		sink->AddArc(D2D1::ArcSegment(endPoint, arcSize, 0.0f, sweepDir, arcSizeFlag));
+		sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+		sink->Close();
+		return geo;
+	}
+
+	// 辅助函数：绘制轮廓文本
+	void DrawTextOutline(ID2D1RenderTarget* ctx, IDWriteTextLayout* layout, float x, float y,
+		ID2D1SolidColorBrush* outlineBrush) {
+		ctx->DrawTextLayout(D2D1::Point2F(x - OUTLINE_OFFSET, y - OUTLINE_OFFSET), layout, outlineBrush);
+		ctx->DrawTextLayout(D2D1::Point2F(x + OUTLINE_OFFSET, y - OUTLINE_OFFSET), layout, outlineBrush);
+		ctx->DrawTextLayout(D2D1::Point2F(x - OUTLINE_OFFSET, y + OUTLINE_OFFSET), layout, outlineBrush);
+		ctx->DrawTextLayout(D2D1::Point2F(x + OUTLINE_OFFSET, y + OUTLINE_OFFSET), layout, outlineBrush);
+	}
+}
+
 void D2DGraphics::FillPie(D2D1_POINT_2F center, float width, float height, float startAngle, float sweepAngle, D2D1_COLOR_F color) {
-	constexpr float degToRad = 3.14159265359f / 180.0f;
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx) {
-		return;
-	}
+	if (!ctx) return;
 	auto brush = GetColorBrush(color);
-	if (!brush) {
-		return;
-	}
-	ComPtr<ID2D1PathGeometry> geo;
-	geo.Attach(Factory::CreateGeomtry());
-	if (!geo) {
-		return;
-	}
-	ComPtr<ID2D1GeometrySink> sink;
-	if (FAILED(geo->Open(&sink))) {
-		return;
-	}
-	sink->BeginFigure(center, D2D1_FIGURE_BEGIN_FILLED);
-	float startRad = startAngle * degToRad;
-	float endRad = (startAngle + sweepAngle) * degToRad;
-	D2D1_POINT_2F startPoint{ center.x + (width * 0.5f) * cosf(startRad), center.y - (height * 0.5f) * sinf(startRad) };
-	D2D1_POINT_2F endPoint{ center.x + (width * 0.5f) * cosf(endRad), center.y - (height * 0.5f) * sinf(endRad) };
-	sink->AddLine(startPoint);
-	D2D1_SIZE_F arcSize{ width * 0.5f, height * 0.5f };
-	D2D1_ARC_SIZE arcSizeFlag = (std::fabs(sweepAngle) <= 180.0f) ? D2D1_ARC_SIZE_SMALL : D2D1_ARC_SIZE_LARGE;
-	D2D1_SWEEP_DIRECTION sweepDir = sweepAngle >= 0.0f ? D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
-	sink->AddArc(D2D1::ArcSegment(endPoint, arcSize, 0.0f, sweepDir, arcSizeFlag));
-	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
-	sink->Close();
+	if (!brush) return;
+	auto geo = CreatePieGeometry(center, width, height, startAngle, sweepAngle);
+	if (!geo) return;
 	ctx->FillGeometry(geo.Get(), brush);
 }
+
 void D2DGraphics::FillPie(D2D1_POINT_2F center, float width, float height, float startAngle, float sweepAngle, ID2D1Brush* brush) {
-	constexpr float degToRad = 3.14159265359f / 180.0f;
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx || !brush) {
-		return;
-	}
-	ComPtr<ID2D1PathGeometry> geo;
-	geo.Attach(Factory::CreateGeomtry());
-	if (!geo) {
-		return;
-	}
-	ComPtr<ID2D1GeometrySink> sink;
-	if (FAILED(geo->Open(&sink))) {
-		return;
-	}
-	sink->BeginFigure(center, D2D1_FIGURE_BEGIN_FILLED);
-	float startRad = startAngle * degToRad;
-	float endRad = (startAngle + sweepAngle) * degToRad;
-	D2D1_POINT_2F startPoint{ center.x + (width * 0.5f) * cosf(startRad), center.y - (height * 0.5f) * sinf(startRad) };
-	D2D1_POINT_2F endPoint{ center.x + (width * 0.5f) * cosf(endRad), center.y - (height * 0.5f) * sinf(endRad) };
-	sink->AddLine(startPoint);
-	D2D1_SIZE_F arcSize{ width * 0.5f, height * 0.5f };
-	D2D1_ARC_SIZE arcSizeFlag = (std::fabs(sweepAngle) <= 180.0f) ? D2D1_ARC_SIZE_SMALL : D2D1_ARC_SIZE_LARGE;
-	D2D1_SWEEP_DIRECTION sweepDir = sweepAngle >= 0.0f ? D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
-	sink->AddArc(D2D1::ArcSegment(endPoint, arcSize, 0.0f, sweepDir, arcSizeFlag));
-	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
-	sink->Close();
+	if (!ctx || !brush) return;
+	auto geo = CreatePieGeometry(center, width, height, startAngle, sweepAngle);
+	if (!geo) return;
 	ctx->FillGeometry(geo.Get(), brush);
 }
 void D2DGraphics::DrawBitmap(ID2D1Bitmap* bmp, float x, float y, float opacity) {
@@ -620,14 +622,14 @@ void D2DGraphics::FillMesh(ID2D1Mesh* mesh, D2D1_COLOR_F color) {
 	ctx->FillMesh(mesh, brush);
 }
 
-IDWriteTextLayout* D2DGraphics::CreateStringLayout(std::wstring str, float width, float height, Font* font) {
-	IDWriteTextLayout* textLayout = NULL;
+IDWriteTextLayout* D2DGraphics::CreateStringLayout(const std::wstring& str, float width, float height, Font* font) {
+	IDWriteTextLayout* textLayout = nullptr;
 	Font* resolvedFont = font ? font : DefaultFontObject;
 	if (!resolvedFont) {
 		return nullptr;
 	}
 	IDWriteTextFormat* fnt = resolvedFont->FontObject;
-	_DWriteFactory->CreateTextLayout(str.c_str(), str.size(), fnt, width, height, &textLayout);
+	_DWriteFactory->CreateTextLayout(str.c_str(), static_cast<UINT32>(str.size()), fnt, width, height, &textLayout);
 	return textLayout;
 }
 void D2DGraphics::DrawStringLayout(IDWriteTextLayout* layout, float x, float y, D2D1_COLOR_F color) {
@@ -649,7 +651,6 @@ void D2DGraphics::DrawStringLayout(IDWriteTextLayout* layout, float x, float y, 
 	ctx->DrawTextLayout(D2D1::Point2F(x, y), layout, brush);
 }
 
-// 居中绘制TextLayout（坐标为文本中心）
 void D2DGraphics::DrawStringLayoutCentered(IDWriteTextLayout* layout, float centerX, float centerY, D2D1_COLOR_F color) {
 	auto* ctx = pRenderTarget.Get();
 	if (!ctx || !layout) {
@@ -679,95 +680,47 @@ void D2DGraphics::DrawStringLayoutCentered(IDWriteTextLayout* layout, float cent
 	ctx->DrawTextLayout(D2D1::Point2F(x, y), layout, brush);
 }
 
-// 描边绘制TextLayout
 void D2DGraphics::DrawStringLayoutOutlined(IDWriteTextLayout* layout, float x, float y, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor) {
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx || !layout) {
-		return;
-	}
+	if (!ctx || !layout) return;
 	auto textBrush = GetColorBrush(textColor);
 	auto outlineBrush = GetBackColorBrush(outlineColor);
-	if (!textBrush || !outlineBrush) {
-		return;
-	}
-
-	// 绘制描边（四个方向）
-	ctx->DrawTextLayout(D2D1::Point2F(x - 1, y - 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x + 1, y - 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x - 1, y + 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x + 1, y + 1), layout, outlineBrush);
-
-	// 绘制文本本体
+	if (!textBrush || !outlineBrush) return;
+	DrawTextOutline(ctx, layout, x, y, outlineBrush);
 	ctx->DrawTextLayout(D2D1::Point2F(x, y), layout, textBrush);
 }
 
 void D2DGraphics::DrawStringLayoutOutlined(IDWriteTextLayout* layout, float x, float y, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor) {
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx || !layout || !textBrush) {
-		return;
-	}
+	if (!ctx || !layout || !textBrush) return;
 	auto outlineBrush = GetBackColorBrush(outlineColor);
-	if (!outlineBrush) {
-		return;
-	}
-
-	// 绘制描边（四个方向）
-	ctx->DrawTextLayout(D2D1::Point2F(x - 1, y - 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x + 1, y - 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x - 1, y + 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x + 1, y + 1), layout, outlineBrush);
-
-	// 绘制文本本体
+	if (!outlineBrush) return;
+	DrawTextOutline(ctx, layout, x, y, outlineBrush);
 	ctx->DrawTextLayout(D2D1::Point2F(x, y), layout, textBrush);
 }
 
-// 居中描边绘制TextLayout
 void D2DGraphics::DrawStringLayoutCenteredOutlined(IDWriteTextLayout* layout, float centerX, float centerY, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor) {
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx || !layout) {
-		return;
-	}
+	if (!ctx || !layout) return;
 	auto textBrush = GetColorBrush(textColor);
 	auto outlineBrush = GetBackColorBrush(outlineColor);
-	if (!textBrush || !outlineBrush) {
-		return;
-	}
-
+	if (!textBrush || !outlineBrush) return;
 	D2D1_SIZE_F textSize = GetTextLayoutSize(layout);
 	float x = centerX - textSize.width * 0.5f;
 	float y = centerY - textSize.height * 0.5f;
-
-	// 绘制描边（四个方向）
-	ctx->DrawTextLayout(D2D1::Point2F(x - 1, y - 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x + 1, y - 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x - 1, y + 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x + 1, y + 1), layout, outlineBrush);
-
-	// 绘制文本本体
+	DrawTextOutline(ctx, layout, x, y, outlineBrush);
 	ctx->DrawTextLayout(D2D1::Point2F(x, y), layout, textBrush);
 }
 
 void D2DGraphics::DrawStringLayoutCenteredOutlined(IDWriteTextLayout* layout, float centerX, float centerY, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor) {
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx || !layout || !textBrush) {
-		return;
-	}
+	if (!ctx || !layout || !textBrush) return;
 	auto outlineBrush = GetBackColorBrush(outlineColor);
-	if (!outlineBrush) {
-		return;
-	}
-
+	if (!outlineBrush) return;
 	D2D1_SIZE_F textSize = GetTextLayoutSize(layout);
 	float x = centerX - textSize.width * 0.5f;
 	float y = centerY - textSize.height * 0.5f;
-
-	// 绘制描边（四个方向）
-	ctx->DrawTextLayout(D2D1::Point2F(x - 1, y - 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x + 1, y - 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x - 1, y + 1), layout, outlineBrush);
-	ctx->DrawTextLayout(D2D1::Point2F(x + 1, y + 1), layout, outlineBrush);
-
-	// 绘制文本本体
+	DrawTextOutline(ctx, layout, x, y, outlineBrush);
 	ctx->DrawTextLayout(D2D1::Point2F(x, y), layout, textBrush);
 }
 
@@ -804,36 +757,26 @@ void D2DGraphics::DrawStringLayoutEffect(IDWriteTextLayout* layout, float x, flo
 	layout->SetDrawingEffect(backBrush, subRange);
 	ctx->DrawTextLayout(D2D1::Point2F(x, y), layout, brush);
 }
-void D2DGraphics::DrawString(std::wstring str, float x, float y, D2D1_COLOR_F color, Font* font) {
+void D2DGraphics::DrawString(const std::wstring& str, float x, float y, D2D1_COLOR_F color, Font* font) {
 	D2D1_RECT_F rect = D2D1::RectF(x, y, FLT_MAX, FLT_MAX);
 	Font* resolvedFont = font ? font : DefaultFontObject;
-	if (!resolvedFont) {
-		return;
-	}
+	if (!resolvedFont) return;
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx) {
-		return;
-	}
+	if (!ctx) return;
 	auto brush = GetColorBrush(color);
-	if (!brush) {
-		return;
-	}
+	if (!brush) return;
 	ctx->DrawText(str.c_str(), static_cast<UINT32>(str.size()), resolvedFont->FontObject, &rect, brush);
 }
-void D2DGraphics::DrawString(std::wstring str, float x, float y, ID2D1Brush* brush, Font* font) {
+void D2DGraphics::DrawString(const std::wstring& str, float x, float y, ID2D1Brush* brush, Font* font) {
 	D2D1_RECT_F rect = D2D1::RectF(x, y, FLT_MAX, FLT_MAX);
 	Font* resolvedFont = font ? font : DefaultFontObject;
-	if (!resolvedFont) {
-		return;
-	}
+	if (!resolvedFont) return;
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx || !brush) {
-		return;
-	}
+	if (!ctx || !brush) return;
 	auto fnt = resolvedFont->FontObject;
 	ctx->DrawText(str.c_str(), static_cast<UINT32>(str.size()), fnt, &rect, brush);
 }
-void D2DGraphics::DrawString(std::wstring str, float x, float y, float w, float h, D2D1_COLOR_F color, Font* font) {
+void D2DGraphics::DrawString(const std::wstring& str, float x, float y, float w, float h, D2D1_COLOR_F color, Font* font) {
 	IDWriteTextLayout* textLayout = CreateStringLayout(str, w, h, font ? font : DefaultFontObject);
 	if (!textLayout) return;
 	auto* ctx = pRenderTarget.Get();
@@ -849,7 +792,7 @@ void D2DGraphics::DrawString(std::wstring str, float x, float y, float w, float 
 	ctx->DrawTextLayout({ x,y }, textLayout, brush);
 	textLayout->Release();
 }
-void D2DGraphics::DrawString(std::wstring str, float x, float y, float w, float h, ID2D1Brush* brush, Font* font) {
+void D2DGraphics::DrawString(const std::wstring& str, float x, float y, float w, float h, ID2D1Brush* brush, Font* font) {
 	IDWriteTextLayout* textLayout = CreateStringLayout(str, w, h, font ? font : DefaultFontObject);
 	if (!textLayout) return;
 	auto* ctx = pRenderTarget.Get();
@@ -861,12 +804,9 @@ void D2DGraphics::DrawString(std::wstring str, float x, float y, float w, float 
 	textLayout->Release();
 }
 
-// 居中绘制文本（坐标为文本中心）
-void D2DGraphics::DrawStringCentered(std::wstring str, float centerX, float centerY, D2D1_COLOR_F color, Font* font) {
+void D2DGraphics::DrawStringCentered(const std::wstring& str, float centerX, float centerY, D2D1_COLOR_F color, Font* font) {
 	Font* resolvedFont = font ? font : DefaultFontObject;
-	if (!resolvedFont) {
-		return;
-	}
+	if (!resolvedFont) return;
 	IDWriteTextLayout* textLayout = CreateStringLayout(str, FLT_MAX, FLT_MAX, resolvedFont);
 	if (!textLayout) return;
 	auto* ctx = pRenderTarget.Get();
@@ -888,11 +828,9 @@ void D2DGraphics::DrawStringCentered(std::wstring str, float centerX, float cent
 	textLayout->Release();
 }
 
-void D2DGraphics::DrawStringCentered(std::wstring str, float centerX, float centerY, ID2D1Brush* brush, Font* font) {
+void D2DGraphics::DrawStringCentered(const std::wstring& str, float centerX, float centerY, ID2D1Brush* brush, Font* font) {
 	Font* resolvedFont = font ? font : DefaultFontObject;
-	if (!resolvedFont) {
-		return;
-	}
+	if (!resolvedFont) return;
 	IDWriteTextLayout* textLayout = CreateStringLayout(str, FLT_MAX, FLT_MAX, resolvedFont);
 	if (!textLayout) return;
 	auto* ctx = pRenderTarget.Get();
@@ -909,12 +847,9 @@ void D2DGraphics::DrawStringCentered(std::wstring str, float centerX, float cent
 	textLayout->Release();
 }
 
-// 描边绘制文本
-void D2DGraphics::DrawStringOutlined(std::wstring str, float x, float y, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font) {
+void D2DGraphics::DrawStringOutlined(const std::wstring& str, float x, float y, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font) {
 	Font* resolvedFont = font ? font : DefaultFontObject;
-	if (!resolvedFont) {
-		return;
-	}
+	if (!resolvedFont) return;
 	IDWriteTextLayout* textLayout = CreateStringLayout(str, FLT_MAX, FLT_MAX, resolvedFont);
 	if (!textLayout) return;
 	auto* ctx = pRenderTarget.Get();
@@ -929,22 +864,14 @@ void D2DGraphics::DrawStringOutlined(std::wstring str, float x, float y, D2D1_CO
 		return;
 	}
 
-	// 绘制描边（四个方向）
-	ctx->DrawTextLayout({ x - 1, y - 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x + 1, y - 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x - 1, y + 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x + 1, y + 1 }, textLayout, outlineBrush);
-
-	// 绘制文本本体
+	DrawTextOutline(ctx, textLayout, x, y, outlineBrush);
 	ctx->DrawTextLayout({ x, y }, textLayout, textBrush);
 	textLayout->Release();
 }
 
-void D2DGraphics::DrawStringOutlined(std::wstring str, float x, float y, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font) {
+void D2DGraphics::DrawStringOutlined(const std::wstring& str, float x, float y, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font) {
 	Font* resolvedFont = font ? font : DefaultFontObject;
-	if (!resolvedFont) {
-		return;
-	}
+	if (!resolvedFont) return;
 	IDWriteTextLayout* textLayout = CreateStringLayout(str, FLT_MAX, FLT_MAX, resolvedFont);
 	if (!textLayout) return;
 	auto* ctx = pRenderTarget.Get();
@@ -958,23 +885,14 @@ void D2DGraphics::DrawStringOutlined(std::wstring str, float x, float y, ID2D1Br
 		return;
 	}
 
-	// 绘制描边（四个方向）
-	ctx->DrawTextLayout({ x - 1, y - 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x + 1, y - 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x - 1, y + 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x + 1, y + 1 }, textLayout, outlineBrush);
-
-	// 绘制文本本体
+	DrawTextOutline(ctx, textLayout, x, y, outlineBrush);
 	ctx->DrawTextLayout({ x, y }, textLayout, textBrush);
 	textLayout->Release();
 }
 
-// 居中描边绘制文本
-void D2DGraphics::DrawStringCenteredOutlined(std::wstring str, float centerX, float centerY, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font) {
+void D2DGraphics::DrawStringCenteredOutlined(const std::wstring& str, float centerX, float centerY, D2D1_COLOR_F textColor, D2D1_COLOR_F outlineColor, Font* font) {
 	Font* resolvedFont = font ? font : DefaultFontObject;
-	if (!resolvedFont) {
-		return;
-	}
+	if (!resolvedFont) return;
 	IDWriteTextLayout* textLayout = CreateStringLayout(str, FLT_MAX, FLT_MAX, resolvedFont);
 	if (!textLayout) return;
 	auto* ctx = pRenderTarget.Get();
@@ -993,22 +911,14 @@ void D2DGraphics::DrawStringCenteredOutlined(std::wstring str, float centerX, fl
 	float x = centerX - textSize.width * 0.5f;
 	float y = centerY - textSize.height * 0.5f;
 
-	// 绘制描边（四个方向）
-	ctx->DrawTextLayout({ x - 1, y - 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x + 1, y - 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x - 1, y + 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x + 1, y + 1 }, textLayout, outlineBrush);
-
-	// 绘制文本本体
+	DrawTextOutline(ctx, textLayout, x, y, outlineBrush);
 	ctx->DrawTextLayout({ x, y }, textLayout, textBrush);
 	textLayout->Release();
 }
 
-void D2DGraphics::DrawStringCenteredOutlined(std::wstring str, float centerX, float centerY, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font) {
+void D2DGraphics::DrawStringCenteredOutlined(const std::wstring& str, float centerX, float centerY, ID2D1Brush* textBrush, D2D1_COLOR_F outlineColor, Font* font) {
 	Font* resolvedFont = font ? font : DefaultFontObject;
-	if (!resolvedFont) {
-		return;
-	}
+	if (!resolvedFont) return;
 	IDWriteTextLayout* textLayout = CreateStringLayout(str, FLT_MAX, FLT_MAX, resolvedFont);
 	if (!textLayout) return;
 	auto* ctx = pRenderTarget.Get();
@@ -1026,13 +936,7 @@ void D2DGraphics::DrawStringCenteredOutlined(std::wstring str, float centerX, fl
 	float x = centerX - textSize.width * 0.5f;
 	float y = centerY - textSize.height * 0.5f;
 
-	// 绘制描边（四个方向）
-	ctx->DrawTextLayout({ x - 1, y - 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x + 1, y - 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x - 1, y + 1 }, textLayout, outlineBrush);
-	ctx->DrawTextLayout({ x + 1, y + 1 }, textLayout, outlineBrush);
-
-	// 绘制文本本体
+	DrawTextOutline(ctx, textLayout, x, y, outlineBrush);
 	ctx->DrawTextLayout({ x, y }, textLayout, textBrush);
 	textLayout->Release();
 }
@@ -1055,6 +959,7 @@ void D2DGraphics::FillTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color) {
 	if (FAILED(geo->Open(&sink))) {
 		return;
 	}
+
 	//sink->BeginFigure(triangle.point1, D2D1_FIGURE_BEGIN_FILLED);
 	//sink->AddLine(triangle.point2);
 	//sink->AddLine(triangle.point3);
@@ -1196,30 +1101,25 @@ void D2DGraphics::DrawPolygon(std::vector<D2D1_POINT_2F> points, D2D1_COLOR_F co
 	ctx->DrawGeometry(geo.Get(), brush, width);
 }
 void D2DGraphics::DrawArc(D2D1_POINT_2F center, float size, float sa, float ea, D2D1_COLOR_F color, float width) {
-	const auto __AngleToPoint = [](D2D1_POINT_2F Cent, float Angle, float Len) {
-		return Len > 0 ? D2D1::Point2F((Cent.x + (sin(Angle * (float)M_PI / 180.0f) * Len)), (Cent.y - (cos(Angle * (float)M_PI / 180.0f) * Len))) : Cent;
+	const auto angleToPoint = [](D2D1_POINT_2F cent, float angle, float len) {
+		return len > 0 ? D2D1::Point2F(
+			cent.x + sinf(angle * DEG_TO_RAD) * len,
+			cent.y - cosf(angle * DEG_TO_RAD) * len) : cent;
 		};
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx) {
-		return;
-	}
+	if (!ctx) return;
 	auto brush = GetColorBrush(color);
-	if (!brush) {
-		return;
-	}
+	if (!brush) return;
 	ComPtr<ID2D1PathGeometry> geo;
 	geo.Attach(Factory::CreateGeomtry());
-	if (!geo) {
-		return;
-	}
+	if (!geo) return;
 	float ts = sa, te = ea;
 	if (te < ts) te += 360.0f;
 	D2D1_ARC_SIZE sweep = (te - ts < 180.0f) ? D2D1_ARC_SIZE_SMALL : D2D1_ARC_SIZE_LARGE;
 	ComPtr<ID2D1GeometrySink> sink;
-	if (FAILED(geo->Open(&sink))) {
-		return;
-	}
-	auto start = __AngleToPoint(center, sa, size), end = __AngleToPoint(center, ea, size);
+	if (FAILED(geo->Open(&sink))) return;
+	auto start = angleToPoint(center, sa, size);
+	auto end = angleToPoint(center, ea, size);
 	sink->BeginFigure(start, D2D1_FIGURE_BEGIN_HOLLOW);
 	sink->AddArc(D2D1::ArcSegment(end, D2D1::SizeF(size, size), 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, sweep));
 	sink->EndFigure(D2D1_FIGURE_END_OPEN);
@@ -1227,30 +1127,25 @@ void D2DGraphics::DrawArc(D2D1_POINT_2F center, float size, float sa, float ea, 
 	ctx->DrawGeometry(geo.Get(), brush, width);
 }
 void D2DGraphics::DrawArcCounter(D2D1_POINT_2F center, float size, float sa, float ea, D2D1_COLOR_F color, float width) {
-	const auto __AngleToPoint = [](D2D1_POINT_2F Cent, float Angle, float Len) {
-		return Len > 0 ? D2D1::Point2F((Cent.x + (sin(Angle * (float)M_PI / 180.0f) * Len)), (Cent.y - (cos(Angle * (float)M_PI / 180.0f) * Len))) : Cent;
+	const auto angleToPoint = [](D2D1_POINT_2F cent, float angle, float len) {
+		return len > 0 ? D2D1::Point2F(
+			cent.x + sinf(angle * DEG_TO_RAD) * len,
+			cent.y - cosf(angle * DEG_TO_RAD) * len) : cent;
 		};
 	auto* ctx = pRenderTarget.Get();
-	if (!ctx) {
-		return;
-	}
+	if (!ctx) return;
 	auto brush = GetColorBrush(color);
-	if (!brush) {
-		return;
-	}
+	if (!brush) return;
 	ComPtr<ID2D1PathGeometry> geo;
 	geo.Attach(Factory::CreateGeomtry());
-	if (!geo) {
-		return;
-	}
+	if (!geo) return;
 	float ts = sa, te = ea;
 	if (te < ts) te += 360.0f;
 	D2D1_ARC_SIZE sweep = (te - ts < 180.0f) ? D2D1_ARC_SIZE_SMALL : D2D1_ARC_SIZE_LARGE;
 	ComPtr<ID2D1GeometrySink> sink;
-	if (FAILED(geo->Open(&sink))) {
-		return;
-	}
-	auto start = __AngleToPoint(center, sa, size), end = __AngleToPoint(center, ea, size);
+	if (FAILED(geo->Open(&sink))) return;
+	auto start = angleToPoint(center, sa, size);
+	auto end = angleToPoint(center, ea, size);
 	sink->BeginFigure(start, D2D1_FIGURE_BEGIN_HOLLOW);
 	sink->AddArc(D2D1::ArcSegment(end, D2D1::SizeF(size, size), 0.0f, D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE, sweep));
 	sink->EndFigure(D2D1_FIGURE_END_OPEN);
@@ -1354,7 +1249,7 @@ ID2D1RadialGradientBrush* D2DGraphics::CreateRadialGradientBrush(D2D1_GRADIENT_S
 	}
 	return brush.Detach();
 }
-ID2D1BitmapBrush* D2DGraphics::CreateitmapBrush(ID2D1Bitmap* bmp) {
+ID2D1BitmapBrush* D2DGraphics::CreateBitmapBrush(ID2D1Bitmap* bmp) {
 	auto* ctx = pRenderTarget.Get();
 	if (!ctx || !bmp) {
 		return nullptr;
@@ -1392,30 +1287,28 @@ void D2DGraphics::ClearTransform() {
 }
 HBITMAP D2DGraphics::CopyFromScreen(int x, int y, int width, int height) {
 	HDC sourceDC = GetDC(NULL);
-	HDC momDC = CreateCompatibleDC(sourceDC);
+	HDC memDC = CreateCompatibleDC(sourceDC);
 	HBITMAP memBitmap = CreateCompatibleBitmap(sourceDC, width, height);
-	SelectObject(momDC, memBitmap);
-	BitBlt(momDC, 0, 0, width, height, sourceDC, x, y, SRCCOPY);
-	DeleteDC(momDC);
+	SelectObject(memDC, memBitmap);
+	BitBlt(memDC, 0, 0, width, height, sourceDC, x, y, SRCCOPY);
+	DeleteDC(memDC);
 	ReleaseDC(NULL, sourceDC);
 	return memBitmap;
 }
 HBITMAP D2DGraphics::CopyFromWidnow(HWND hWnd, int x, int y, int width, int height) {
 	HDC sourceDC = GetDC(hWnd);
-	HDC momDC;
-	momDC = ::CreateCompatibleDC(sourceDC);
-	HBITMAP memBitmap;
-	memBitmap = ::CreateCompatibleBitmap(sourceDC, width, height);
-	SelectObject(momDC, memBitmap);
-	BitBlt(momDC, 0, 0, width, height, sourceDC, x, y, SRCCOPY);
-	DeleteDC(momDC);
+	HDC memDC = ::CreateCompatibleDC(sourceDC);
+	HBITMAP memBitmap = ::CreateCompatibleBitmap(sourceDC, width, height);
+	SelectObject(memDC, memBitmap);
+	BitBlt(memDC, 0, 0, width, height, sourceDC, x, y, SRCCOPY);
+	DeleteDC(memDC);
 	ReleaseDC(hWnd, sourceDC);
 	return memBitmap;
 }
 SIZE D2DGraphics::GetScreenSize(int index) {
 	std::vector<SIZE> sizes = std::vector<SIZE>();
-	auto callback = [](HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
-		std::vector<SIZE>* tmp = (std::vector<SIZE>*)dwData;
+	auto callback = [](HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) -> BOOL {
+		std::vector<SIZE>* tmp = reinterpret_cast<std::vector<SIZE>*>(dwData);
 		MONITORINFOEX miex{};
 		miex.cbSize = sizeof(miex);
 		GetMonitorInfo(hMonitor, &miex);
@@ -1426,7 +1319,7 @@ SIZE D2DGraphics::GetScreenSize(int index) {
 		tmp->push_back(SIZE{ (int)dm.dmPelsWidth,(int)dm.dmPelsHeight });
 		return TRUE;
 		};
-	EnumDisplayMonitors(NULL, NULL, (MONITORENUMPROC)callback, (LPARAM)&sizes);
+	EnumDisplayMonitors(NULL, NULL, callback, (LPARAM)&sizes);
 	if (sizes.size() > index) {
 		return sizes[index];
 	}
@@ -1437,7 +1330,7 @@ D2D1_SIZE_F D2DGraphics::GetTextLayoutSize(IDWriteTextLayout* textLayout) {
 	D2D1_SIZE_F minSize = { 0,0 };
 	DWRITE_TEXT_METRICS metrics;
 	HRESULT hr = textLayout->GetMetrics(&metrics);
-	if SUCCEEDED(hr) {
+	if (SUCCEEDED(hr)) {
 		minSize = D2D1::Size((float)ceil(metrics.widthIncludingTrailingWhitespace), (float)ceil(metrics.height));
 		return minSize;
 	}

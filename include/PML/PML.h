@@ -1,5 +1,5 @@
 #pragma once
-#include <Windows.h>
+#include "../Utils/defines.h"
 #include <iostream>
 #include <Shlobj.h>
 #include <commdlg.h>

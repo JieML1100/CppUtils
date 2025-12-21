@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <Windows.h>
+#include <initializer_list>
 #include <vector>
 #ifndef PROPERTY
 #define PROPERTY(t,n) __declspec( property (put = Set##n, get = Get##n)) t n

@@ -3,7 +3,6 @@
 #include <regex>
 #include <sstream>
 #include <iomanip>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 #include "HttpHelper.h"
 #pragma comment(lib, "Ws2_32.lib")

@@ -1,5 +1,6 @@
 ﻿#include "Clipboard.h"
 #include <ShlObj.h>
+#include <shellapi.h>
 #include <oleidl.h>
 #include <comdef.h>
 std::string Clipboard::GetText() {
