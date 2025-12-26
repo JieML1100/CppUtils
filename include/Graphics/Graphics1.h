@@ -21,6 +21,9 @@
 #include "Factory.h"
 #include "BitmapSource.h"
 
+#pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3d11.lib")
+
 #ifndef _LIB
 #if defined(_MT)
 // MT (静态运行时库)

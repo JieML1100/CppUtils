@@ -27,6 +27,9 @@
 - **Debug/Release**: 自动检测
 - **MT/MD**: 自动检测运行时库类型
 
+### Nuget包快速使用
+https://www.nuget.org/packages/CppUtils
+
 ### 示例代码
 ```cpp
 #include <Graphics/Graphics.h>

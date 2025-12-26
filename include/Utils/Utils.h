@@ -30,6 +30,14 @@
 #include "zlib/zlib.h"
 #include "Socket.h"
 
+#ifndef _LIB
+#pragma comment(lib, "dbghelp.lib")
+#pragma comment(lib, "wtsapi32.lib")
+#pragma comment(lib, "winhttp.lib")
+#pragma comment(lib, "rpcrt4.lib")
+#pragma comment(lib, "ntdll.lib")
+#endif
+
 #if defined(_MT) && !defined(_DLL)
 #ifndef _LIB
 #if defined(_M_X64) && defined(_DEBUG)

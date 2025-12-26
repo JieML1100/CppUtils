@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <CppUtilsPackageRoot>$(MSBuildThisFileDirectory)</CppUtilsPackageRoot>
+    <CppUtilsIncludeDir>$(CppUtilsPackageRoot)include\</CppUtilsIncludeDir>
+
+    <!-- Map VS toolset to the bundled prebuilt libs folder.
+         Prefer VCToolsVersion (e.g. 14.3x / 14.4x) because PlatformToolset numbers may vary over time. -->
+    <CppUtilsToolsetFolder Condition="'$(VCToolsVersion)' != '' and $([System.String]::Copy('$(VCToolsVersion)').StartsWith('14.3'))">vs2022</CppUtilsToolsetFolder>
+    <CppUtilsToolsetFolder Condition="'$(VCToolsVersion)' != '' and $([System.String]::Copy('$(VCToolsVersion)').StartsWith('14.5'))">vs2026</CppUtilsToolsetFolder>
+
+    <!-- Fallback mapping by PlatformToolset -->
+    <CppUtilsToolsetFolder Condition="'$(CppUtilsToolsetFolder)'=='' and '$(PlatformToolset)'=='v143'">vs2022</CppUtilsToolsetFolder>
+    <CppUtilsToolsetFolder Condition="'$(CppUtilsToolsetFolder)'=='' and '$(PlatformToolset)'=='v145'">vs2026</CppUtilsToolsetFolder>
+
+    <!-- Last resort default (kept for legacy/unknown toolsets) -->
+    <CppUtilsToolsetFolder Condition="'$(CppUtilsToolsetFolder)'==''">vs2022</CppUtilsToolsetFolder>
+
+    <CppUtilsLibDir>$(CppUtilsPackageRoot)lib\$(CppUtilsToolsetFolder)\</CppUtilsLibDir>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(CppUtilsIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(CppUtilsLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

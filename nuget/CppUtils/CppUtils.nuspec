@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>CppUtils</id>
+    <version>1.0.0</version>
+    <authors>CppUtils</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Prebuilt C++ static libraries (CppUtils + Graphics) with headers. Adds include/lib paths automatically for VS C++ projects.</description>
+    <tags>native cplusplus win32 direct2d</tags>
+  </metadata>
+
+  <files>
+    <!-- MSBuild integration -->
+    <file src="build\native\**\*.*" target="build\native" />
+
+    <!-- Public headers -->
+    <file src="..\..\include\**\*.*" target="build\native\include" />
+
+    <!-- Prebuilt libs for VS2022 / VS2026 toolsets -->
+    <file src="..\..\CppUtils v1.0.0\lib for vs2022\*.lib" target="build\native\lib\vs2022" />
+    <file src="..\..\CppUtils v1.0.0\lib for vs2026\*.lib" target="build\native\lib\vs2026" />
+  </files>
+</package>

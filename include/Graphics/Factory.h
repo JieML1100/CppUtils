@@ -4,6 +4,8 @@
 #include <wincodec.h>
 #include <string>
 #pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "windowscodecs.lib")
 
 class Factory {
 private:

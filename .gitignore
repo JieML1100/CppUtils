@@ -206,6 +206,10 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 
+# Local NuGet packaging outputs/tools
+/nuget/out/
+/nuget/tools/
+
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
@@ -364,3 +368,5 @@ FodyWeavers.xsd
 /build
 /Graphics/.vscode
 /.vscode
+/CppUtils v1.0.0
+/CppUtils v1.0.0.zip
