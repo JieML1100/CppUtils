@@ -1079,20 +1079,29 @@ void D2DGraphics1::DrawStringCenteredOutlined(const std::wstring& str, float cen
 
 void D2DGraphics1::FillTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color) {
 	auto* ctx = pDeviceContext.Get();
-	if (!ctx) return;
-	auto brush = GetColorBrush(color);
-	if (!brush) return;
-	ID2D1Mesh* mesh = nullptr;
-	if (SUCCEEDED(ctx->CreateMesh(&mesh))) {
-		ID2D1TessellationSink* meshSink;
-		if (SUCCEEDED(mesh->Open(&meshSink))) {
-			meshSink->AddTriangles(&triangle, 1);
-			meshSink->Close();
-			ctx->FillMesh(mesh, brush);
-			meshSink->Release();
-		}
-		mesh->Release();
+	if (!ctx) {
+		return;
 	}
+	auto brush = GetColorBrush(color);
+	if (!brush) {
+		return;
+	}
+	ComPtr<ID2D1PathGeometry> geo;
+	geo.Attach(Factory::CreateGeomtry());
+	if (!geo) {
+		return;
+	}
+	ComPtr<ID2D1GeometrySink> sink;
+	if (FAILED(geo->Open(&sink))) {
+		return;
+	}
+
+	sink->BeginFigure(triangle.point1, D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddLine(triangle.point2);
+	sink->AddLine(triangle.point3);
+	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+	sink->Close();
+	ctx->FillGeometry(geo.Get(), brush);
 	wicDirty = true;
 }
 void D2DGraphics1::DrawTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color, float width) {

@@ -960,24 +960,12 @@ void D2DGraphics::FillTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color) {
 		return;
 	}
 
-	//sink->BeginFigure(triangle.point1, D2D1_FIGURE_BEGIN_FILLED);
-	//sink->AddLine(triangle.point2);
-	//sink->AddLine(triangle.point3);
-	//sink->EndFigure(D2D1_FIGURE_END_CLOSED);
-	//sink->Close();
-	//ctx->FillGeometry(geo.Get(), brush);
-
-	ID2D1Mesh* mesh = nullptr;
-	if (SUCCEEDED(ctx->CreateMesh(&mesh))) {
-		ID2D1TessellationSink* meshSink;
-		if (SUCCEEDED(mesh->Open(&meshSink))) {
-			meshSink->AddTriangles(&triangle, 1);
-			meshSink->Close();
-			ctx->FillMesh(mesh, brush);
-			meshSink->Release();
-		}
-		mesh->Release();
-	}
+	sink->BeginFigure(triangle.point1, D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddLine(triangle.point2);
+	sink->AddLine(triangle.point3);
+	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+	sink->Close();
+	ctx->FillGeometry(geo.Get(), brush);
 }
 void D2DGraphics::DrawTriangle(D2D1_TRIANGLE triangle, D2D1_COLOR_F color, float width) {
 	auto* ctx = pRenderTarget.Get();
