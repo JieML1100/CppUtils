@@ -37,7 +37,8 @@ https://www.nuget.org/packages/CppUtils
 
 int main() {
     // 图形绘制
-    D2DGraphics gfx(800, 600);
+	auto srcBitmap = BitmapSource::CreateEmpty(800, 600);
+    D2DGraphics gfx = D2DGraphics(srcBitmap.get());
     gfx.BeginRender();
     gfx.Clear(Colors::White);
     gfx.FillRect(100, 100, 200, 150, Colors::SkyBlue);
