@@ -370,3 +370,5 @@ FodyWeavers.xsd
 /.vscode
 /CppUtils v1.0.0
 /CppUtils v1.0.0.zip
+/CppUtils v1.0.1
+*.zip
