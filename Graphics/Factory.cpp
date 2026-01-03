@@ -11,7 +11,7 @@ ID2D1Factory1* Factory::D2DFactory() {
 	if (!pD2DFactory) {
 		D2D1_FACTORY_OPTIONS factoryOptions = {};
 #if defined(_DEBUG)
-		factoryOptions.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
+		factoryOptions.debugLevel = D2D1_DEBUG_LEVEL_ERROR;
 #endif
 		D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, __uuidof(ID2D1Factory1), &factoryOptions, reinterpret_cast<void**>(&pD2DFactory));
 	}
@@ -122,6 +122,6 @@ ID2D1PathGeometry* Factory::CreateGeomtry() {
 }
 IDWriteTextLayout* Factory::CreateStringLayout(std::wstring str, float width, float height, IDWriteTextFormat* font) {
 	IDWriteTextLayout* textLayout = NULL;
-	_DWriteFactory->CreateTextLayout(str.c_str(), str.size(), font, width, height, &textLayout);
+	_DWriteFactory->CreateTextLayout(str.c_str(), static_cast<UINT32>(str.size()), font, width, height, &textLayout);
 	return textLayout;
 }

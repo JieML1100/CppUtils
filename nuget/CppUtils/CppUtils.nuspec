@@ -17,7 +17,7 @@
     <file src="..\..\include\**\*.*" target="build\native\include" />
 
     <!-- Prebuilt libs for VS2022 / VS2026 toolsets -->
-    <file src="..\..\CppUtils v1.0.0\lib for vs2022\*.lib" target="build\native\lib\vs2022" />
-    <file src="..\..\CppUtils v1.0.0\lib for vs2026\*.lib" target="build\native\lib\vs2026" />
+    <file src="..\..\CppUtils v1.0.1\lib for vs2022\*.lib" target="build\native\lib\vs2022" />
+    <file src="..\..\CppUtils v1.0.1\lib for vs2026\*.lib" target="build\native\lib\vs2026" />
   </files>
 </package>

@@ -2,14 +2,14 @@
 
 #include <algorithm>
 #include <cmath>
-#include <numbers>
 
 #include <d2derr.h>
 
 using Microsoft::WRL::ComPtr;
 
 constexpr float INV_255 = 1.0f / 255.0f;
-constexpr float DEG_TO_RAD = M_PI / 180.0f;
+constexpr float PI_F = 3.14159265358979323846f;
+constexpr float DEG_TO_RAD = PI_F / 180.0f;
 constexpr float OUTLINE_OFFSET = 1.0f;
 
 namespace {
@@ -51,6 +51,12 @@ D2DGraphics::D2DGraphics(const InitOptions& options) {
 }
 
 D2DGraphics::~D2DGraphics() = default;
+
+void D2DGraphics::SetDpi(FLOAT dpiX, FLOAT dpiY) {
+	if (pRenderTarget) {
+		pRenderTarget->SetDpi(dpiX, dpiY);
+	}
+}
 
 HRESULT D2DGraphics::ConfigDefaultObjects() {
 	if (!pRenderTarget) {

@@ -86,6 +86,7 @@ public:
 	explicit D2DGraphics(const InitOptions& options);
 	virtual ~D2DGraphics();
 
+	void SetDpi(FLOAT dpiX, FLOAT dpiY);
 	virtual void BeginRender();
 	virtual void EndRender();
 	virtual void ReSize(UINT width, UINT height);

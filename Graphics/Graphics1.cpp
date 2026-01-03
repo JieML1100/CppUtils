@@ -184,6 +184,12 @@ D2DGraphics1::D2DGraphics1(const InitOptions& options) {
 
 D2DGraphics1::~D2DGraphics1() = default;
 
+void D2DGraphics1::SetDpi(FLOAT dpiX, FLOAT dpiY) {
+	if (pDeviceContext) {
+		pDeviceContext->SetDpi(dpiX, dpiY);
+	}
+}
+
 HRESULT D2DGraphics1::EnsureDeviceContext() {
 	return EnsureDeviceResources();
 }
