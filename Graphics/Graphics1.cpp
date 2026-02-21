@@ -8,6 +8,7 @@
 #include <d2derr.h>
 
 #include <d3d11.h>
+#include <d3d10_1.h>
 #include <dxgi1_2.h>
 
 #pragma comment(lib, "d3d11.lib")
@@ -35,13 +36,34 @@ namespace {
 		return s;
 	}
 
+	bool IsDeviceRemovedHr(HRESULT hr) {
+		return hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET || hr == DXGI_ERROR_DEVICE_HUNG ||
+			hr == DXGI_ERROR_DRIVER_INTERNAL_ERROR;
+	}
+
+	void ResetSharedDevice() {
+		auto& s = Shared();
+		s.d2dDevice.Reset();
+		s.dxgiDevice.Reset();
+		s.d3dContext.Reset();
+		s.d3dDevice.Reset();
+	}
+
 	HRESULT CreateSharedDeviceIfNeeded() {
 		auto& s = Shared();
+		// 远程桌面断开/重连、显示设备切换等可能导致 D3D 设备被移除。
+		// 如果继续复用旧设备，会导致后续 CreateDeviceContext/Present/EndDraw 反复失败。
+		if (s.d3dDevice) {
+			HRESULT reason = s.d3dDevice->GetDeviceRemovedReason();
+			if (reason != S_OK && IsDeviceRemovedHr(reason)) {
+				ResetSharedDevice();
+			}
+		}
 		if (s.d2dDevice && s.dxgiDevice && s.d3dDevice) {
 			return S_OK;
 		}
 
-		UINT flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+		UINT flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
 #if defined(_DEBUG)
 		flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
@@ -84,6 +106,13 @@ namespace {
 		}
 		if (FAILED(hr)) {
 			return hr;
+		}
+
+		// 共享设备会被 UI 线程（D2D）与后台线程（例如视频解码/处理）并发使用。
+		// 启用 multithread protection，避免 D3D11 immediate context 的跨线程调用引发未定义行为。
+		ComPtr<ID3D10Multithread> multithread;
+		if (SUCCEEDED(dev.As(&multithread)) && multithread) {
+			multithread->SetMultithreadProtected(TRUE);
 		}
 
 		ComPtr<IDXGIDevice> dxgiDevice;
@@ -1518,7 +1547,16 @@ void HwndGraphics1::ReSize(UINT width, UINT height) {
 	pDeviceContext->SetTarget(nullptr);
 	pDeviceContext->Flush();
 
-	pSwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	HRESULT hr = pSwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	if (FAILED(hr) && IsDeviceRemovedHr(hr)) {
+		_deviceLost = true;
+		ResetTarget();
+		if (SUCCEEDED(InitDevice())) {
+			_deviceLost = false;
+			::InvalidateRect(hwnd, nullptr, FALSE);
+		}
+		return;
+	}
 	CreateTargetBitmapForSwapChain(pSwapChain.Get());
 	ConfigDefaultObjects();
 }
@@ -1530,13 +1568,24 @@ void HwndGraphics1::BeginRender() {
 void HwndGraphics1::EndRender() {
 	// Hwnd：既需要 EndDraw，也需要 Present
 	if (!pDeviceContext) return;
-	HRESULT hr = pDeviceContext->EndDraw();
+	_lastEndDrawHr = pDeviceContext->EndDraw();
+	_lastPresentHr = S_OK;
 	if (pSwapChain) {
-		pSwapChain->Present(1, 0);
+		_lastPresentHr = pSwapChain->Present(1, 0);
 	}
-	if (hr == D2DERR_RECREATE_TARGET && pSwapChain) {
+	if (_lastEndDrawHr == D2DERR_RECREATE_TARGET && pSwapChain) {
 		CreateTargetBitmapForSwapChain(pSwapChain.Get());
 		ConfigDefaultObjects();
+		_deviceLost = false;
+		return;
+	}
+	if (IsDeviceRemovedHr(_lastEndDrawHr) || IsDeviceRemovedHr(_lastPresentHr)) {
+		_deviceLost = true;
+		ResetTarget();
+		if (SUCCEEDED(InitDevice())) {
+			_deviceLost = false;
+			::InvalidateRect(hwnd, nullptr, FALSE);
+		}
 	}
 }
 
@@ -1556,7 +1605,12 @@ void CompositionSwapChainGraphics1::ReSize(UINT width, UINT height) {
 	pDeviceContext->SetTarget(nullptr);
 	pDeviceContext->Flush();
 
-	pSwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	HRESULT hr = pSwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	if (FAILED(hr) && IsDeviceRemovedHr(hr)) {
+		// Composition swapchain 的生命周期由 DCompLayeredHost 管理：这里只标记，交由上层重建。
+		_deviceLost = true;
+		return;
+	}
 	CreateTargetBitmapForSwapChain(pSwapChain.Get());
 	ConfigDefaultObjects();
 }
@@ -1567,13 +1621,19 @@ void CompositionSwapChainGraphics1::BeginRender() {
 
 void CompositionSwapChainGraphics1::EndRender() {
 	if (!pDeviceContext) return;
-	HRESULT hr = pDeviceContext->EndDraw();
+	_lastEndDrawHr = pDeviceContext->EndDraw();
+	_lastPresentHr = S_OK;
 	if (pSwapChain) {
-		pSwapChain->Present(1, 0);
+		_lastPresentHr = pSwapChain->Present(1, 0);
 	}
-	if (hr == D2DERR_RECREATE_TARGET && pSwapChain) {
+	if (_lastEndDrawHr == D2DERR_RECREATE_TARGET && pSwapChain) {
 		CreateTargetBitmapForSwapChain(pSwapChain.Get());
 		ConfigDefaultObjects();
+		_deviceLost = false;
+		return;
+	}
+	if (IsDeviceRemovedHr(_lastEndDrawHr) || IsDeviceRemovedHr(_lastPresentHr)) {
+		_deviceLost = true;
 	}
 }
 
