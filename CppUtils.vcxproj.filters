@@ -224,9 +224,6 @@
     <ClCompile Include="Utils\HttpHelper.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\HttpHelperExp.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\MD5.cpp">
       <Filter>Utils</Filter>
     </ClCompile>

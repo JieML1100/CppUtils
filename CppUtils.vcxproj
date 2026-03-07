@@ -79,7 +79,7 @@
     <ClCompile Include="Utils\FileStream.cpp" />
     <ClCompile Include="Utils\Guid.cpp" />
     <ClCompile Include="Utils\HttpHelper.cpp" />
-    <ClCompile Include="Utils\HttpHelperExp.cpp" />
+    
     <ClCompile Include="Utils\MD5.cpp" />
     <ClCompile Include="Utils\Process.cpp" />
     <ClCompile Include="Utils\ProcessOperator.cpp" />

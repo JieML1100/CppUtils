@@ -24,14 +24,12 @@
     <ClInclude Include="Graphics\Factory.h" />
     <ClInclude Include="Graphics\Font.h" />
     <ClInclude Include="Graphics\Graphics.h" />
-    <ClInclude Include="Graphics\Graphics1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\BitmapSource.cpp" />
     <ClCompile Include="Graphics\Factory.cpp" />
     <ClCompile Include="Graphics\Font.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
-    <ClCompile Include="Graphics\Graphics1.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

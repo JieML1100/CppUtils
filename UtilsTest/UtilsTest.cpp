@@ -4,11 +4,11 @@
 #define _LIB 1
 #include "../Utils/Utils.h"
 #include "../Utils/httplib.h"
-#include "../Graphics/Graphics1.h"
+#include "../Graphics/Graphics.h"
 #define BMP_SIZE_DEF 52
 
 // 全局变量：用于窗口渲染
-static HwndGraphics1* g_pHwndGraphics = nullptr;
+static HwndGraphics* g_pHwndGraphics = nullptr;
 static ID2D1Bitmap* g_pDrawItem = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -48,13 +48,43 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     }
 }
 
+void run()
+{
+    bool inExc = false;
+    bool homeDown = false;
+    while (1) {
+        //当用户按下HOME切换inExc
+        //当inExc为true时，模拟键盘的空格键以及鼠标左键点击
+        if (GetAsyncKeyState(VK_HOME) & 0x8000) {
+            if (!homeDown) {
+                inExc = !inExc;
+                homeDown = true;
+            }
+        }
+        else {
+            homeDown = false;
+        }
+        if (inExc) {
+            //模拟空格键按下
+            keybd_event(VK_SPACE, 0, 0, 0);
+            //模拟空格键释放
+            keybd_event(VK_SPACE, 0, KEYEVENTF_KEYUP, 0);
+            //模拟鼠标左键点击
+            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        }
+        Sleep(200); // 避免过于频繁地模拟输入
+
+    }
+}
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
+    run();
     // 1. 先做离屏渲染测试
     auto bitmap = BitmapSource::CreateEmpty(400, 400);
-    auto g = D2DGraphics1(bitmap.get());
+    auto g = D2DGraphics(bitmap.get());
 
     auto bitmap1 = BitmapSource::CreateEmpty(1920, 1080);
-    D2DGraphics1 g1(bitmap1.get());
+    D2DGraphics g1(bitmap1.get());
 
     g.BeginRender();
     g.Clear(Colors::Green);
@@ -103,7 +133,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     }
 
     // 4. 创建 HwndGraphics1（用真正的窗口）
-    g_pHwndGraphics = new HwndGraphics1(hwnd);
+    g_pHwndGraphics = new HwndGraphics(hwnd);
     g_pDrawItem = g_pHwndGraphics->CreateBitmap(bitmap1);
 
     ShowWindow(hwnd, nCmdShow);
@@ -129,8 +159,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
     return (int)msg.wParam;
 }
-
 // 保留 main 入口给控制台模式（如果需要）
 int main() {
+    run();
     return WinMain(GetModuleHandle(nullptr), nullptr, GetCommandLineA(), SW_SHOWNORMAL);
 }
